@@ -1,6 +1,7 @@
 import React from "react"
 import Post from "./Post"
 import Login from "./accounts/Login"
+import Signup from "./accounts/Signup";
 import { Routes , Route } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
 function Root() {
@@ -11,6 +12,8 @@ function Root() {
         <Routes>
           <Route path="/" element={<Post />} />
           <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+          
         </Routes>
       </AppLayout>
     </div>
