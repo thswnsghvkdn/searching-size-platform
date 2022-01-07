@@ -2,7 +2,6 @@ import React from "react"
 import Axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, ListGroup, Form, Navbar, Nav } from 'react-bootstrap'
-import { CaretRight, CaretLeft } from 'react-bootstrap-icons'
 const apiUrl = "http://127.0.0.1:8000/search/"
 
 
