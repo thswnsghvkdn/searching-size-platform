@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom"
 
 ReactDOM.render(
+  // BrowserRouter로 감싸야 react-router-dom 사용가능
   <BrowserRouter>
     <Root />
   </BrowserRouter>,

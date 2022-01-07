@@ -1,11 +1,17 @@
 import React from "react"
-import Post from "../components/Post"
+import Post from "./Post"
+import Login from "./accounts/Login"
+import { Routes , Route } from "react-router-dom";
 import AppLayout from "../components/AppLayout";
 function Root() {
   return (
     <div>
       <AppLayout>
-        <Post></Post>
+        {/* 라우팅 컴포넌트 BrowserRouter -> Routes -> Route 순으로 컴포넌트 구성해야 합니다 */}
+        <Routes>
+          <Route path="/" element={<Post />} />
+          <Route path="login" element={<Login />} />
+        </Routes>
       </AppLayout>
     </div>
   );
