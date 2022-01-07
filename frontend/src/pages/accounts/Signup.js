@@ -18,7 +18,7 @@ function Signup() {
                 console.log("response :" , response);
                 // 서버로 부가정보 보내기
 
-                Axios.post("http://localhost:8000/accounts/"+ response.data.pk +"/update/" , bodies)
+                Axios.put("http://localhost:8000/accounts/"+ response.data.pk +"/update/" , bodies)
                 .then(response => {
                     console.log("가입완료");
                 })
