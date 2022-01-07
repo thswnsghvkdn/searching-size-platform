@@ -1,30 +1,37 @@
 import React , {useState} from "react"
 import Axios from "axios"
 import { Alert } from "antd"
+import { useNavigate } from "react-router-dom"
+
 
 function Signup() {
+    // redirect 용 history const
+    const navigate = useNavigate();
+
     // state는 동적인 값을 의미 ,useState()는 배열을 반환하는데 [현재 상태 , Setter 함수]
     const [inputs , setInputs] = useState({});
     const [bodies , setBodies] = useState({});
     // 에러가 있을 경우 사용자에게 보내야 하기 때문에 에러 역시 state로 관리한다.
     const [errors, setErrors] = useState({});
     
+    // pages/accounts/Signup.js
     // 가입 버튼을 누르면 axios 로 서버에 전송
     const onSubmit = e => {
         e.preventDefault();
-        // 서버로 정보 보내기
+        // 기본 유저 모델로 가입
         Axios.post("http://localhost:8000/accounts/signup/" , inputs)
             .then(response => {
-                console.log("response :" , response);
-                // 서버로 부가정보 보내기
-
+                // 가입 응답이 올 경우 부가 정보 모델로 업데이트 리퀘스트 바로보내기 put 요청으로 보내기
                 Axios.put("http://localhost:8000/accounts/"+ response.data.pk +"/update/" , bodies)
                 .then(response => {
                     console.log("가입완료");
+                    // 가입 후 리다이렉트
+                    navigate("/");
                 })
                 .catch(error => {
                     console.log("error :" , error);
                 });    
+
             })
             .catch(error => {
                 console.log("error :" , error);
