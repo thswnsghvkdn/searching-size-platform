@@ -1,7 +1,9 @@
 import React from "react"
 import Axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button, ListGroup, Form, Navbar, Nav } from 'react-bootstrap'
+import { Button, ListGroup, Form } from 'react-bootstrap'
+import { Select } from 'antd';
+const { Option } = Select;
 const apiUrl = "http://127.0.0.1:8000/search/"
 
 
@@ -77,36 +79,38 @@ class Post extends React.Component {
         this.ordered = answer;
     }
     attendance = () => {
-        // 포스트요청에 body들을 보낸다
+        
         Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], })
-            .then(response => {
-                // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
-                this.setState({
-                    responseLists: response.data,
-                })
-                // this.makeList();
-                // 리스트 추가
-                this.t = []
-                for (let i = 0; i < this.state.responseLists.message.length; i++) {
-                    this.t.push(<ListGroup.Item style={{ width: '80%', marginLeft: '0%' }}><a href={this.state.responseLists.message[i].link}><img src={this.state.responseLists.message[i].image} width="100px" style={{ float: 'left' }} /></a><div style={{ marginLeft: '1%' }}>{this.state.responseLists.message[i].title}</div><div style={{ marginTop: '70px', marginLeft: '10%' }}>{this.state.responseLists.message[i].price}원</div></ListGroup.Item>)
-                }
-                this.setState({
-                    listItem: this.t,
-                })
-            })
+                    .then(response => {
+                        // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
+                        this.setState({
+                            responseLists: response.data,
+                        })
+                        // this.makeList();
+                        // 리스트 추가
+                        this.t = []
+                        for (let i = 0; i < this.state.responseLists.message.length; i++) {
+                            this.t.push(<ListGroup.Item style={{ width: '80%', marginLeft: '0%' }}><a href={this.state.responseLists.message[i].link}><img src={this.state.responseLists.message[i].image} width="100px" style={{ float: 'left' }} /></a><div style={{ marginLeft: '1%' }}>{this.state.responseLists.message[i].title}</div><div style={{ marginTop: '70px', marginLeft: '10%' }}>{this.state.responseLists.message[i].price}원</div></ListGroup.Item>)
+                        }
+                        this.setState({
+                            listItem: this.t,
+                        })
+                    })
+             
     }
     // 상의와 하의 카테고리 생성
-    makeCategory = (e) => {
+    makeCategory = (event) => {
+        // 검색 창
         this.c = []
-        if (e.target.value == "상의") {
-            this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) { this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
+        if (event == "상의") {
+            this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="어깨" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="가슴" onChange={function (e) { this.size[1] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="총길이" onChange={function (e) { this.size[2] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="소매" onChange={function (e) { this.size[3] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
         }
         else {
-            this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) { this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
+            this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="총장" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="허벅지" onChange={function (e) { this.size[1] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="허리" onChange={function (e) { this.size[2] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
@@ -121,24 +125,21 @@ class Post extends React.Component {
     render = () => {
         return (
             <div>
-                <div>
-                    <Navbar bg="primary" variant="dark">
-                        <Nav className="mr-auto" >
-                            <Nav.Link href="#home" >Home</Nav.Link>
-                            <Nav.Link href="#features" >login</Nav.Link>
-                        </Nav>
-                    </Navbar>
-                </div>
                 {/* <div style={{ float: 'left' }}>
                     <CaretLeft />
                 </div> */}
                 <div class="parent" style={{ width: '100%', height: '300px' }} >
                     <Form style={{ transform: 'translate(40% , 10%)' }} > {/* 가운데 정렬을 위한 translate */}
                         <Form.Group >
-                            <select name="cloth" onChange={this.makeCategory} >
+                            <Select name='cloth' defaultValue="상의" style={{ width: 120 , marginBottom : '1%' , marginLeft : '0.5%'}} onChange={this.makeCategory}>
+                                <Option value="상의">상의</Option>
+                                <Option value="하의">하의</Option>
+                            </Select>
+                            
+                            {/* <select name="cloth" onChange={this.makeCategory} >
                                 <option value="상의"  >상의</option>
                                 <option value="하의"  >하의</option>
-                            </select>
+                            </select> */}
                             {this.state.category}
                             {/* <Form.Control type="text" placeholder="검색 하세요" onChange={function (e) { this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />
                             <Form.Control type="text" placeholder="총장" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />

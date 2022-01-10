@@ -23,4 +23,4 @@ class ProfileUpdateAPI(generics.UpdateAPIView):
     lookup_field = "user_pk"
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer 
-
+    
