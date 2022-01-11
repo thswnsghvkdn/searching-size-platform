@@ -13,7 +13,6 @@ import {setToken } from "../../store"
 
 function Login(props) {
 
-    
 
     // redirect 용 history const
     const navigate = useNavigate();
@@ -44,11 +43,11 @@ function Login(props) {
                     message : "로그인 성공" ,
                     description : "검색 페이지로 이동합니다.",
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
-                });
-                
+                });                
                 // props 변경
                 props.onLoginChange(<Nav.Link href ="/">환영해</Nav.Link>);
                 navigate('/')
+
             } catch(error) { // asny await 에서 post 요청이 문제가 생길 경우 에러를 발생시킴
                 if(error.response) {
                     // 실패 알림
