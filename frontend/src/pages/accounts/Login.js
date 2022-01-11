@@ -9,8 +9,9 @@ import useLocalStorage from "../utils/useLocalStorage"
 import { useAppContext } from "../../store"
 import {setToken } from "../../store"
 
-function Login() {
 
+
+function Login() {
 
     
 
@@ -31,6 +32,8 @@ function Login() {
                 const {data : {token : jwtToken}} = response;
                 // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.
                 dispatch(setToken(jwtToken))
+                
+                
                 // setJwtToken(jwtToken)
                 // {data : token} ==  const token = response.data
                 // {data : {token}} == const token = response.data.token , 중괄호 하나로 달라지는 차이
@@ -42,7 +45,8 @@ function Login() {
                     description : "검색 페이지로 이동합니다.",
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
                 });
-                navigate('/')
+                window.location.replace("/") // 리로드
+                //navigate('/')
             } catch(error) { // asny await 에서 post 요청이 문제가 생길 경우 에러를 발생시킴
                 if(error.response) {
                     // 실패 알림

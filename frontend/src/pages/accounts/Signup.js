@@ -51,14 +51,14 @@ function Signup() {
                 // 세번째 인자는 config 로써 헤더 정보를 실을 수 있다.
                 await Axios.put("http://localhost:8000/accounts/"+ response.data.pk +"/update/" , data2 , {headers} )
                 .then( () => {
-                    navigate("/")
+                    // 성공 알림
+                    notification.open({
+                        message : "회원가입 성공" ,
+                        description : "검색 페이지로 이동합니다.",
+                        icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
+                    });
+                    window.location.replace("/") // 리로드
                 })
-                // 성공 알림
-                notification.open({
-                    message : "회원가입 성공" ,
-                    description : "검색 페이지로 이동합니다.",
-                    icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
-                });
 
             } catch(error) { // asny await 에서 post 요청이 문제가 생길 경우 에러를 발생시킴
                 if(error.response) {

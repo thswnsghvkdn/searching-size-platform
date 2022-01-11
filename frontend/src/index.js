@@ -9,6 +9,7 @@ import { AppProvider } from "./store"
 ReactDOM.render(
   // BrowserRouter로 감싸야 react-router-dom 사용가능
   <BrowserRouter>
+  {/*  컨텍스트를 사용하기 위해 AppLayout 컴포넌트로 감싼다  */}
     <AppProvider>
       <Root />
     </AppProvider>
