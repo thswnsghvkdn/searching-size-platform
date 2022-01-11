@@ -26,7 +26,6 @@ class Root extends React.Component {
   render = () =>{ return (
     <div>
       <AppHeader loginState = {this.state.loginState}/> 
-
         {/* 라우팅 컴포넌트 BrowserRouter -> Routes -> Route 순으로 컴포넌트 구성해야 합니다 */}
         <Routes>
           <Route path="/" element={<Post />} />

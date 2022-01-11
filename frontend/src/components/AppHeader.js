@@ -10,6 +10,7 @@ class AppHeader extends React.Component {
     constructor(props) {
         super(props)
 
+
     }
     // 로그인이 되어있을 경우 사용자 이름 보이기
     checkUser = () => {
@@ -24,6 +25,7 @@ class AppHeader extends React.Component {
                 <Nav className="mr-auto" >
                     <Nav.Link href="/" >Home</Nav.Link>
                     { this.props.loginState}
+
                 </Nav>
             </Navbar>
 
