@@ -1,15 +1,24 @@
 import React , {useState} from "react"
 import Axios from "axios"
 import "antd/dist/antd.css"
-import { Form, Input, Button , notification , InputNumber} from "antd"
+import { Card , Form, Input, Button , notification } from "antd"
 import {  Nav } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
 import { SmileOutlined , FrownOutlined } from "@ant-design/icons"
+import useLocalStorage from "../utils/useLocalStorage"
+import { useAppContext } from "../../store"
+import {setToken } from "../../store"
 
 function Login() {
+
+
+    
+
     // redirect 용 history const
     const navigate = useNavigate();
-
+    // AppContext 를 연결시킨 useContext
+    const { dispatch } = useAppContext();
+    // const [jwtToken , setJwtToken] = useLocalStorage("jwtToken", ""); // jwtToken이름으로 저장되면 디폴트 값은 "" 으로 설정
     
     const onFinish = values => {
         async function fn() {
@@ -17,8 +26,16 @@ function Login() {
             const data = { username , password };
             try {
                 // 기본 유저 모델로 회원 가입
-                await Axios.post("http://localhost:8000/accounts/login/", data)
-               
+                const response = await Axios.post("http://localhost:8000/accounts/login/", data)
+                // jwt 토큰 값 
+                const {data : {token : jwtToken}} = response;
+                // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.
+                dispatch(setToken(jwtToken))
+                // setJwtToken(jwtToken)
+                // {data : token} ==  const token = response.data
+                // {data : {token}} == const token = response.data.token , 중괄호 하나로 달라지는 차이
+                // {data : {token : jwtToken}} == const jwtToken = response.data.token
+
                 // 성공 알림
                 notification.open({
                     message : "로그인 성공" ,
@@ -41,7 +58,7 @@ function Login() {
         fn();
     }
   return (
-    <div >
+    <Card title = "로그인" >
         <Form 
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
@@ -87,7 +104,7 @@ function Login() {
         </Nav>
         </Form.Item>
     </Form>
-    </div>
+    </Card>
     );
 }
 
