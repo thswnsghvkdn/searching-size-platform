@@ -1,4 +1,6 @@
 import React from "react"
+import NavTop from "./input/NavTop"
+import NavBottom from "./input/NavBottom"
 import Axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button, ListGroup, Form } from 'react-bootstrap'
@@ -8,11 +10,7 @@ const apiUrl = "http://127.0.0.1:8000/search/"
 
 
 class Post extends React.Component {
-    state = {
-        names: [],
-        listItem: [],
-        category: [],
-    }
+
     keyword = ""
     ordered = []
     size = [-1, -1, -1, -1]
@@ -27,8 +25,9 @@ class Post extends React.Component {
         }
         this.rise = this.thigh = this.outseam = -1
     }
+    cloth = "" // 상의, 하의 선택 구분
     t = []
-    c = []
+    c = [] // 동적 검색창
     checkSame = (ar, index) => { // 사이즈 차이의 최솟값을 반환하는 함수
         let stand = -1;
         for (let i = 0; i < ar.length; i++) {
@@ -78,8 +77,14 @@ class Post extends React.Component {
         })
         this.ordered = answer;
     }
+    // 사이즈 필터링 검색 
     attendance = () => {
-        
+        if(this.cloth === "상의"){
+            this.props.onSearch(<NavTop/>)
+        } else {
+            this.props.onSearch(<NavBottom/>)
+        }
+
         Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], })
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
@@ -103,6 +108,7 @@ class Post extends React.Component {
         // 검색 창
         this.c = []
         if (event == "상의") {
+            this.cloth = "상의"
             this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="어깨" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="가슴" onChange={function (e) { this.size[1] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
@@ -110,6 +116,7 @@ class Post extends React.Component {
             this.c.push(<Form.Control type="text" placeholder="소매" onChange={function (e) { this.size[3] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
         }
         else {
+            this.cloth = "하의"
             this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="총장" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
             this.c.push(<Form.Control type="text" placeholder="허벅지" onChange={function (e) { this.size[1] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
@@ -125,9 +132,7 @@ class Post extends React.Component {
     render = () => {
         return (
             <div>
-                {/* <div style={{ float: 'left' }}>
-                    <CaretLeft />
-                </div> */}
+
                 <div class="parent" style={{ width: '100%', height: '300px' }} >
                     <Form style={{ transform: 'translate(40% , 10%)' }} > {/* 가운데 정렬을 위한 translate */}
                         <Form.Group >
@@ -135,17 +140,7 @@ class Post extends React.Component {
                                 <Option value="상의">상의</Option>
                                 <Option value="하의">하의</Option>
                             </Select>
-                            
-                            {/* <select name="cloth" onChange={this.makeCategory} >
-                                <option value="상의"  >상의</option>
-                                <option value="하의"  >하의</option>
-                            </select> */}
                             {this.state.category}
-                            {/* <Form.Control type="text" placeholder="검색 하세요" onChange={function (e) { this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />
-                            <Form.Control type="text" placeholder="총장" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />
-                            <Form.Control type="text" placeholder="허벅지" onChange={function (e) { this.size[1] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />
-                            <Form.Control type="text" placeholder="허리" onChange={function (e) { this.size[2] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />
-                            <Form.Control type="text" placeholder="밑위" onChange={function (e) { this.size[3] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} /> */}
                             <Button multiple onClick={this.attendance} style={({ margin: '0.5rem', width: '200px' })}>검색</Button>
                         </Form.Group>
                     </Form>
@@ -156,35 +151,10 @@ class Post extends React.Component {
                     </div>
                 </div>
 
-                {/* <div style={{ display: 'inline-block' }}>
-                    <CaretRight />
-                </div> */}
             </div>
         );
     }
 }
 
-/*
-                    <input type="text" placeholder="검색하세요" />
-                    <input type="text" placeholder="총장" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} />
-                    <input type="text" placeholder="허벅지" onChange={function (e) { this.size[2] = Number(e.target.value) }.bind(this)} />
-                    <input type="text" placeholder="밑위" onChange={function (e) { this.size[3] = Number(e.target.value) }.bind(this)} />
-
-
-function Post() {
-    useEffect(() => {
-        Axios.get(apiUrl)
-            .then(response => {
-                console.log("loaded response :", response);
-             
-            })
-    }, []);
-    return (
-        <div>
-            hi
-        </div>
-    )
-}
-*/
 
 export default Post;
