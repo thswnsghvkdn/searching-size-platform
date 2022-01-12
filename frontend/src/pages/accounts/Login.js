@@ -11,7 +11,7 @@ import {setToken } from "../../store"
 
 
 
-function Login() {
+function Login(props) {
 
     
 
@@ -45,8 +45,10 @@ function Login() {
                     description : "검색 페이지로 이동합니다.",
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
                 });
-                window.location.replace("/") // 리로드
-                //navigate('/')
+                
+                // props 변경
+                props.onLoginChange(<Nav.Link href ="/">환영해</Nav.Link>);
+                navigate('/')
             } catch(error) { // asny await 에서 post 요청이 문제가 생길 경우 에러를 발생시킴
                 if(error.response) {
                     // 실패 알림
