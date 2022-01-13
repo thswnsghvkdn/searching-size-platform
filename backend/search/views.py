@@ -27,7 +27,7 @@ def size_search(request):
         # 각 상품헤이지로 접속하기
         for title in totalTitle:
             # 각 상품의 정보 (링크 , 이미지 , 수치오차)
-            goodsInfo = {"image": "", "link": "", "diff": 0, "title": "", "price": ""}
+            goodsInfo = {"image": "", "link": "", "diff": 0, "title": "", "price": "" , "size" : [0,0,0,0]}
             # 10개까지 받아오기
             if number > 5:
                 break
@@ -81,24 +81,39 @@ def size_search(request):
             tot = 0
             index = 0
             min_tot = 100000  # 오차 중 가장 작은 오차값
+            minSize = [0,0,0,0]
             for size in goodsSize:
+ 
                 # 각 부위별 인덱스에 대한 분기 사용자가 특정 부위에 대한 입력을 하지 않을 경우 스킵( abs(data[]) > 1 )
-                if index == osIndex and abs(data["os"] > 1):
-                    tot += abs(data["os"] - float(size.get_text()))
-                elif index == rsIndex and abs(data["rs"] > 1):
-                    tot += abs(data["rs"] - float(size.get_text()))
-                elif index == wsIndex and abs(data["ws"] > 1):
-                    tot += abs(data["ws"] - float(size.get_text()))
-                elif index == thIndex and abs(data["th"] > 1):
-                    tot += abs(data["th"] - float(size.get_text()))
+                if index == osIndex :
+                    minSize[0] = float(size.get_text())
+                    print(minSize[0])
+                    if abs(data["os"] > 1) :
+                        tot += abs(data["os"] - float(size.get_text()))
+                elif index == rsIndex :
+                    minSize[3] = float(size.get_text())
+                    if abs(data["rs"] > 1) :
+                        tot += abs(data["rs"] - float(size.get_text()))
+                elif index == wsIndex :                 
+                    minSize[2] = float(size.get_text())
+                    if abs(data["ws"] > 1) :
+                        tot += abs(data["ws"] - float(size.get_text()))
+                elif index == thIndex :
+                    minSize[1] = float(size.get_text())
+                    if abs(data["th"] > 1) :
+                        tot += abs(data["th"] - float(size.get_text()))
 
                 index += 1
                 if index >= row:
-                    min_tot = min(tot, min_tot)
+                    if(tot <= min_tot) : # 가장 차이가 작은 값을 갱신하며 가장 차이가 작은 적합 사이즈를 추천해주기 위해 저장한다.
+                        min_tot = tot
+                        goodsInfo["size"][0] = minSize[0]
+                        goodsInfo["size"][1] = minSize[1]
+                        goodsInfo["size"][2] = minSize[2]
+                        goodsInfo["size"][3] = minSize[3]
                     index = 0
                     tot = 0
             goodsInfo["diff"] = min_tot
-            print("min:" + str(min_tot))
             goodsInfo["link"] = title["href"]
             goodsInfo["image"] = title.img["data-original"]
             goodsInfo["title"] = title.img["alt"]

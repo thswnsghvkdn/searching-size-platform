@@ -1,20 +1,26 @@
 import React from "react"
+import { Card } from 'antd'
+import { Grid } from "@material-ui/core";
+import { textLineBreak } from "./textLineBreak";
 import NavTop from "./input/NavTop"
 import MainBottom from "./input/MainBottom"
 import MainTop from "./input/MainTop"
 import NavBottom from "./input/NavBottom"
 import Axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button, ListGroup, Form } from 'react-bootstrap'
-import { Select } from 'antd';
-const { Option } = Select;
+import {  ListGroup } from 'react-bootstrap'
 const apiUrl = "http://127.0.0.1:8000/search/"
+const { Meta } = Card
 
 
 class Post extends React.Component {
     constructor(props) {
         super(props)
+        // 메인 검색 컴포넌트에 props로 넘긴 검색 창에서 받은 사이즈 
         this.handleSize = this.handleSize.bind(this);
+        // navbar 에서 search 가 이루어질때 input 값으로 키워드와 사이즈값 변경
+        this.handleInput = this.handleInput.bind(this);
+        // 상의 하의가 바뀔 때 마다 검색창 변경
         this.handleOption = this.handleOption.bind(this);
 
         this.state = {
@@ -29,7 +35,17 @@ class Post extends React.Component {
         this.ordered = []
         this.size = [-1, -1, -1, -1]
     }
-    // 상, 하의 옵션에 따른 검색 컴포넌트 변경  
+
+    handleInput(input) {
+        this.keyword = input.keyword;
+        // size 입력받기 공백이면 -1 값 넣기
+        for(let i = 0 ; i < 4 ; i++) {
+            this.size[i] = input.size[i] != "" ? input.size[i] : -1;
+        }
+        this.attendance();
+    }
+
+    // 메인 검새 컴포넌트에서 상, 하의 옵션에 따른 검색 컴포넌트 변경  
     handleOption(type) {
        if(type === "T") {
             this.setState({
@@ -42,7 +58,7 @@ class Post extends React.Component {
         }
     }
 
-    // props로 넘긴 검색 창에서 받은 사이즈 
+    // 메인 검색 컴포넌트에 props로 넘긴 검색 창에서 받은 사이즈 
     handleSize(newSize , keyword  ) {
         
         this.size = newSize;
@@ -114,9 +130,9 @@ class Post extends React.Component {
     attendance = () => {
         if(this.cloth === "상의"){
             // 키워드와 사이즈 value props로 넘기기
-            this.props.onSearch(<NavTop keyword = {this.keyword} size = {this.size}/>)
+            this.props.onSearch(<NavTop keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
         } else {
-            this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size}/>)
+            this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
         }
 
         Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], })
@@ -128,11 +144,21 @@ class Post extends React.Component {
                         // this.makeList();
                         // 리스트 추가
                         this.t = []
+                        let imageCard = []
                         for (let i = 0; i < this.state.responseLists.message.length; i++) {
+                            // 서버에서 응답받은 가장 적합한 사이즈
+                            const title1 = "Outseam " + parseInt(this.state.responseLists.message[i].size[0]) + " Thigh " + parseInt(this.state.responseLists.message[i].size[1]) +"\nWaist " + parseInt(this.state.responseLists.message[i].size[2]) + " Rise " + parseInt(this.state.responseLists.message[i].size[3]);
                             this.t.push(<ListGroup.Item style={{ width: '80%', marginLeft: '0%' }}><a href={this.state.responseLists.message[i].link}><img src={this.state.responseLists.message[i].image} width="100px" style={{ float: 'left' }} /></a><div style={{ marginLeft: '1%' }}>{this.state.responseLists.message[i].title}</div><div style={{ marginTop: '70px', marginLeft: '10%' }}>{this.state.responseLists.message[i].price}원</div></ListGroup.Item>)
+                            imageCard.push(<Grid item xs = {12} sm={3}><Card 
+                                hoverable 
+                                style ={{width : 220 }} 
+                                cover = {<a href={this.state.responseLists.message[i].link}><img src ={this.state.responseLists.message[i].image}/></a> }
+                                >       
+                                    <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
+                                </Card></Grid> )
                         }
                         this.setState({
-                            listItem: this.t,
+                            listItem: imageCard,
                         })
                     })
              
@@ -142,17 +168,18 @@ class Post extends React.Component {
     render = () => {
         return (
             <div>
-
-                <div class="parent" style={{ width: '100%', height: '300px' }} >
+                <div class="parent" style={{  height: '300px' }} >
                     {/* 입력창 , 검색 후에는 navbar로 올린다 */}
                     {this.state.inputSearch} 
-                    <div class="parent2" style={{ width: '100%' }}>
-                        <ListGroup style={{ transform: 'translate(15% )', marginTop: '10%' }}>
+                    <div class="parent2" style={{ }}>
+                        {/* <ListGroup style={{ transform: 'translate(15% )', marginTop: '10%' }}>
                             {this.state.listItem}
-                        </ListGroup>
+                        </ListGroup> */}
+                        <Grid container spacing = {1} >
+                            {this.state.listItem}      
+                        </Grid>
                     </div>
                 </div>
-
             </div>
         );
     }

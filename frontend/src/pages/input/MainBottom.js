@@ -1,7 +1,6 @@
 import React from "react"
 import { Button, Form } from 'react-bootstrap'
 import { Select  } from 'antd';
-import { TagsOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 
