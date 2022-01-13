@@ -40,7 +40,7 @@ class Root extends React.Component {
   render = () =>{ return (
     <div>
       {/* 헤더에는 로그인 state를 전달한다 */}
-      <AppHeader loginState = {this.state.loginState} searchState = {this.state.searchState}/> 
+      <AppHeader loginState = {this.state.loginState} searchState = {this.state.searchState} /> 
         {/* 라우팅 컴포넌트 BrowserRouter -> Routes -> Route 순으로 컴포넌트 구성해야 합니다 */}
         <Routes>
           {/* 검색 중 일 경우 navbar에 검색 창 표시 */}

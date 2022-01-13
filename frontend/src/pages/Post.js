@@ -1,5 +1,7 @@
 import React from "react"
 import NavTop from "./input/NavTop"
+import MainBottom from "./input/MainBottom"
+import MainTop from "./input/MainTop"
 import NavBottom from "./input/NavBottom"
 import Axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -10,21 +12,52 @@ const apiUrl = "http://127.0.0.1:8000/search/"
 
 
 class Post extends React.Component {
-
-    keyword = ""
-    ordered = []
-    size = [-1, -1, -1, -1]
     constructor(props) {
         super(props)
+        this.handleSize = this.handleSize.bind(this);
+        this.handleOption = this.handleOption.bind(this);
+
         this.state = {
             names: [],
             listItem: [],
             ordered: [],
             responseLists: [],
             category: [],
+            inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption}/> , // 검색창
         }
-        this.rise = this.thigh = this.outseam = -1
+        this.keyword = ""
+        this.ordered = []
+        this.size = [-1, -1, -1, -1]
     }
+    // 상, 하의 옵션에 따른 검색 컴포넌트 변경  
+    handleOption(type) {
+       if(type === "T") {
+            this.setState({
+                inputSearch : <MainTop onSearch = {this.handleSize} onOption = {this.handleOption}/>
+            })
+        } else {
+            this.setState({
+                inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption}/>
+            })
+        }
+    }
+
+    // props로 넘긴 검색 창에서 받은 사이즈 
+    handleSize(newSize , keyword  ) {
+        
+        this.size = newSize;
+        this.keyword = keyword
+        
+        // 키워드가 있을 경우 검색 함수 호출
+        if(this.keyword) {
+            this.setState({
+                inputSearch : ""
+            })
+         this.attendance();
+  
+        }
+    };
+
     cloth = "" // 상의, 하의 선택 구분
     t = []
     c = [] // 동적 검색창
@@ -80,9 +113,10 @@ class Post extends React.Component {
     // 사이즈 필터링 검색 
     attendance = () => {
         if(this.cloth === "상의"){
-            this.props.onSearch(<NavTop/>)
+            // 키워드와 사이즈 value props로 넘기기
+            this.props.onSearch(<NavTop keyword = {this.keyword} size = {this.size}/>)
         } else {
-            this.props.onSearch(<NavBottom/>)
+            this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size}/>)
         }
 
         Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], })
@@ -103,47 +137,15 @@ class Post extends React.Component {
                     })
              
     }
-    // 상의와 하의 카테고리 생성
-    makeCategory = (event) => {
-        // 검색 창
-        this.c = []
-        if (event == "상의") {
-            this.cloth = "상의"
-            this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="어깨" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="가슴" onChange={function (e) { this.size[1] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="총길이" onChange={function (e) { this.size[2] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="소매" onChange={function (e) { this.size[3] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-        }
-        else {
-            this.cloth = "하의"
-            this.c.push(<Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  this.keyword = e.target.value }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="총장" onChange={function (e) { this.size[0] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="허벅지" onChange={function (e) { this.size[1] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="허리" onChange={function (e) { this.size[2] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-            this.c.push(<Form.Control type="text" placeholder="밑위" onChange={function (e) { this.size[3] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />)
-
-        }
-        this.setState({
-            category: this.c,
-        })
-    }
+    
 
     render = () => {
         return (
             <div>
 
                 <div class="parent" style={{ width: '100%', height: '300px' }} >
-                    <Form style={{ transform: 'translate(40% , 10%)' }} > {/* 가운데 정렬을 위한 translate */}
-                        <Form.Group >
-                            <Select name='cloth' defaultValue="상의" style={{ width: 120 , marginBottom : '1%' , marginLeft : '0.5%'}} onChange={this.makeCategory}>
-                                <Option value="상의">상의</Option>
-                                <Option value="하의">하의</Option>
-                            </Select>
-                            {this.state.category}
-                            <Button multiple onClick={this.attendance} style={({ margin: '0.5rem', width: '200px' })}>검색</Button>
-                        </Form.Group>
-                    </Form>
+                    {/* 입력창 , 검색 후에는 navbar로 올린다 */}
+                    {this.state.inputSearch} 
                     <div class="parent2" style={{ width: '100%' }}>
                         <ListGroup style={{ transform: 'translate(15% )', marginTop: '10%' }}>
                             {this.state.listItem}

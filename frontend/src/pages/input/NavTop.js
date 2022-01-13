@@ -14,12 +14,13 @@ class NavTop extends React.Component {
 
         return (
       <>
-            <Search placeholder="input search text" allowClear onSearch={onSearch} style={{ width: 200 ,marginLeft : '2%',  marginTop : '0.5%'}} />
+            <Search placeholder="input search text" defaultValue={this.props.keyword} allowClear onSearch={onSearch} style={{ width: 200 ,marginLeft : '2%',  marginTop : '0.5%'}} />
                 <Input.Group compact style = {{marginTop : "0.5%" , marginLeft : "2%"}}>
-                    <InputNumber style={{ width: '20%' }} defaultValue="" placeholder="어깨" />
-                    <InputNumber style={{ width: '20%' }} defaultValue="" placeholder="가슴"/>
-                    <InputNumber style={{ width: '20%' }} defaultValue="" placeholder="총길이"/>
-                    <InputNumber style={{ width: '20%' }} defaultValue="" placeholder="소매"/>
+                    {/* 메인 검색창에서 받아온 값들로 초기화 */}
+                    <InputNumber style={{ width: '20%' }} defaultValue={this.props.size[0] == -1 ? "" : this.props.size[0]} placeholder="어깨" />
+                    <InputNumber style={{ width: '20%' }} defaultValue={this.props.size[1] == -1 ? "" : this.props.size[1]} placeholder="가슴"/>
+                    <InputNumber style={{ width: '20%' }} defaultValue={this.props.size[2] ==-1 ? "" : this.props.size[2]} placeholder="총길이"/>
+                    <InputNumber style={{ width: '20%' }} defaultValue={this.props.size[3] == -1 ? "" : this.props.size[3]} placeholder="소매"/>
                 </Input.Group>
             </>
         );
