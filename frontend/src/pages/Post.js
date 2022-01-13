@@ -8,8 +8,9 @@ import MainTop from "./input/MainTop"
 import NavBottom from "./input/NavBottom"
 import Axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {  ListGroup } from 'react-bootstrap'
 const apiUrl = "http://127.0.0.1:8000/search/"
+const apiUrl2 = "http://127.0.0.1:8000/search/top/"
+
 const { Meta } = Card
 
 
@@ -35,6 +36,8 @@ class Post extends React.Component {
         this.keyword = ""
         this.ordered = []
         this.size = [-1, -1, -1, -1]
+        this.cloth = "하의" // 상의, 하의 선택 구분
+
     }
 
     handleInput(input) {
@@ -43,16 +46,22 @@ class Post extends React.Component {
         for(let i = 0 ; i < 4 ; i++) {
             this.size[i] = input.size[i] != "" ? input.size[i] : -1;
         }
-        this.attendance();
+        if(this.cloth === "상의"){
+            this.attendance2();
+        } else {
+            this.attendance();
+        }
     }
 
     // 메인 검새 컴포넌트에서 상, 하의 옵션에 따른 검색 컴포넌트 변경  
     handleOption(type) {
        if(type === "T") {
+           this.cloth = "상의"
             this.setState({
                 inputSearch : <MainTop onSearch = {this.handleSize} onOption = {this.handleOption}/>
             })
         } else {
+            this.cloth = "하의"
             this.setState({
                 inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption}/>
             })
@@ -70,12 +79,14 @@ class Post extends React.Component {
             this.setState({
                 inputSearch : ""
             })
-         this.attendance();
-  
+            if(this.cloth === "상의"){
+                this.attendance2();
+            } else {
+                this.attendance();
+            }
         }
     };
 
-    cloth = "" // 상의, 하의 선택 구분
     t = []
     c = [] // 동적 검색창
     checkSame = (ar, index) => { // 사이즈 차이의 최솟값을 반환하는 함수
@@ -110,9 +121,9 @@ class Post extends React.Component {
                             const title1 = "Outseam " + parseInt(this.state.responseLists.message[i].size[0]) + " Thigh " + parseInt(this.state.responseLists.message[i].size[1]) +"\nWaist " + parseInt(this.state.responseLists.message[i].size[2]) + " Rise " + parseInt(this.state.responseLists.message[i].size[3]);
                             
                             // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
-                            imageCard.push(<Grid item xs = {12} sm={3}><Card 
+                            imageCard.push(<Grid item xs = {12} sm={3} ><Card 
                                 hoverable 
-                                style ={{width : 220 }} 
+                                style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
                                 cover = {<a href={this.state.responseLists.message[i].link}><img src ={this.state.responseLists.message[i].image}/></a> }
                                 >   
                                     {/* textLineBreak 는 개행문자 삽입 함수 */}
@@ -125,7 +136,43 @@ class Post extends React.Component {
                     })
              
     }
+        // 사이즈 필터링 검색 
+        attendance2 = () => {
+            if(this.cloth === "상의"){
+                // 키워드와 사이즈 value props로 넘기기
+                this.props.onSearch(<NavTop keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
+            } else {
+                this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
+            }
     
+            Axios.post(apiUrl2, { keyword: this.keyword, os: this.size[0], sh: this.size[1], ch: this.size[2], ar: this.size[3], })
+                        .then(response => {
+                            // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
+                            this.setState({
+                                responseLists: response.data,
+                            })
+                            // 리스트 추가
+                            let imageCard = []
+                            for (let i = 0; i < this.state.responseLists.message.length; i++) {
+                                // 서버에서 응답받은 가장 적합한 사이즈
+                                const title1 = "Back " + parseInt(this.state.responseLists.message[i].size[0]) + " Shoulder " + parseInt(this.state.responseLists.message[i].size[1]) +"\nChest " + parseInt(this.state.responseLists.message[i].size[2]) + " Sleeve " + parseInt(this.state.responseLists.message[i].size[3]);
+                                
+                                // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
+                                imageCard.push(<Grid item xs = {12} sm={3} ><Card 
+                                    hoverable 
+                                    style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
+                                    cover = {<a href={this.state.responseLists.message[i].link}><img src ={this.state.responseLists.message[i].image}/></a> }
+                                    >   
+                                        {/* textLineBreak 는 개행문자 삽입 함수 */}
+                                        <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
+                                    </Card></Grid> )
+                            }
+                            this.setState({
+                                listItem: imageCard,
+                            })
+                        })
+                 
+        }
 
     render = () => {
         return (
