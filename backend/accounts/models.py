@@ -14,7 +14,7 @@ class Profile(models.Model):
     age = models.IntegerField(default=0)
     
 
-# receiver 장식자는 기본 유저 모델과 매핑시킬 모델 인스턴스를 기본 유저 인스턴스가 생성되는 시점에 생성해주도록 한다
+# receiver 장식자는 기본 유저 모델과 매핑시킬 모델 인스턴스를 기본 유저 인스턴스가 생성되는 시점에 생성해주도록 한다 sender인 user 모델이 post_save signal을 보낸 후 동작
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

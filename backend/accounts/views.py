@@ -11,7 +11,7 @@ from .serializers import ProfileSerializer
 class SignupView(CreateAPIView):
     # 모델은 장고가 기본 제공하는 유저모델 (id 와 pw)
     model = get_user_model()
-    # seliaizer 로 유저모델을 직렬화 한다
+    # seliaizer 로 json 데이터를 db 인스턴스로 변환
     serializer_class = SignupSerializer
     # 회원가입페이지 접근권한
     permission_classes = [
