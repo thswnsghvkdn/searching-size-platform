@@ -37,7 +37,7 @@ class Post extends React.Component {
         this.ordered = []
         this.size = [-1, -1, -1, -1]
         this.cloth = "하의" // 상의, 하의 선택 구분
-
+        this.page = 1
     }
 
     handleInput(input) {
@@ -47,8 +47,10 @@ class Post extends React.Component {
             this.size[i] = input.size[i] != "" ? input.size[i] : -1;
         }
         if(this.cloth === "상의"){
+            this.page = 1
             this.attendance2();
         } else {
+            this.page = 1
             this.attendance();
         }
     }
@@ -80,8 +82,13 @@ class Post extends React.Component {
                 inputSearch : ""
             })
             if(this.cloth === "상의"){
+                this.page = 1
                 this.attendance2();
             } else {
+                this.setState({
+                    listItem : []
+                })
+                this.page = 1
                 this.attendance();
             }
         }
@@ -108,15 +115,17 @@ class Post extends React.Component {
             this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
         }
 
-        Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], })
+        Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], page : this.page})
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
                         this.setState({
                             responseLists: response.data,
                         })
                         // 리스트 추가
-                        let imageCard = []
+                        let imageCard = this.state.listItem
                         for (let i = 0; i < this.state.responseLists.message.length; i++) {
+                            // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
+                            if(this.state.responseLists.message[i] === null) continue
                             // 서버에서 응답받은 가장 적합한 사이즈
                             const title1 = "Outseam " + parseInt(this.state.responseLists.message[i].size[0]) + " Thigh " + parseInt(this.state.responseLists.message[i].size[1]) +"\nWaist " + parseInt(this.state.responseLists.message[i].size[2]) + " Rise " + parseInt(this.state.responseLists.message[i].size[3]);
                             
@@ -130,11 +139,12 @@ class Post extends React.Component {
                                     <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
                                 </Card></Grid> )
                         }
+                        imageCard.push(<div ref = {this.ref} />)
                         this.setState({
                             listItem: imageCard,
                         })
                     })
-             
+             this.page += 1
     }
         // 사이즈 필터링 검색 
         attendance2 = () => {
@@ -154,6 +164,8 @@ class Post extends React.Component {
                             // 리스트 추가
                             let imageCard = []
                             for (let i = 0; i < this.state.responseLists.message.length; i++) {
+                                // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
+                                if(this.state.responseLists.message[i] === null) continue
                                 // 서버에서 응답받은 가장 적합한 사이즈
                                 const title1 = "Back " + parseInt(this.state.responseLists.message[i].size[0]) + " Shoulder " + parseInt(this.state.responseLists.message[i].size[1]) +"\nChest " + parseInt(this.state.responseLists.message[i].size[2]) + " Sleeve " + parseInt(this.state.responseLists.message[i].size[3]);
                                 
@@ -177,7 +189,7 @@ class Post extends React.Component {
     render = () => {
         return (
             <div>
-                <div class="parent" style={{  height: '300px' }} >
+                <div class="parent" style={{  }} >
                     {/* 입력창 , 검색 후에는 navbar로 올린다 */}
                     {this.state.inputSearch} 
                     <div class="parent2" style={{ }}>
