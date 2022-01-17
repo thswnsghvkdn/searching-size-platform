@@ -3,6 +3,6 @@ from search import views
 
 urlpatterns = [
     path("", views.size_search),
-    path("top/", views.size_search_top),
+    path("top/", views.size_search2),
 ]
 

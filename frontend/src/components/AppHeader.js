@@ -1,10 +1,8 @@
 import React from "react"
-import NavBottom from "../pages/input/NavBottom";
 
 import {  Navbar, Nav } from 'react-bootstrap'
-import { getStorageItem } from "../pages/utils/useLocalStorage";
-import { deleteToken, useAppContext } from "../store";
-import {Input , InputNumber } from "antd";
+import { deleteToken } from "../store";
+import {Input  } from "antd";
 const {Search } = Input
 class AppHeader extends React.Component {
     // dispatch = useAppContext();
@@ -21,7 +19,7 @@ class AppHeader extends React.Component {
         return (
             <div>
             <Navbar bg="primary" variant="dark" style={{  marginBottom: '2%' }}>
-                <Nav className="mr-auto" >
+                <Nav >
                     <Nav.Link href="/" >Home</Nav.Link>
                     { this.props.loginState}
                     {this.props.searchState}
