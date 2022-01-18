@@ -20,13 +20,16 @@ class Root extends React.Component {
     this.state = { 
       loginState : <Nav.Link href ="/login">Login</Nav.Link>, // 로그인 상태
       searchState : "" , // 검색 중
+      userId : ""
 
     }
+
   }
   //  자식 컴포넌트에서 부모 컴포넌트의 props 를 변경하기 위해서는 setter 함수를 전달한다.
-  handleLoginState(newState) {
+  handleLoginState(newState, id) {
     this.setState ({
-      loginState : newState
+      loginState : newState,
+      userId : id
     });
   };
 
@@ -44,7 +47,7 @@ class Root extends React.Component {
         {/* 라우팅 컴포넌트 BrowserRouter -> Routes -> Route 순으로 컴포넌트 구성해야 합니다 */}
         <Routes>
           {/* 검색 중 일 경우 navbar에 검색 창 표시 */}
-          <Route path="/" element={<Post onSearch = {this.handleSearchState} />} />
+          <Route path="/" element={<Post onSearch = {this.handleSearchState} userId = {this.userId} />} />
           {/* 로그인 컴포넌트에는 setter 함수를 전달하여 로그인 시에 props 값을 변경하도록 하였다. */}
           <Route path="login" element={<Login onLoginChange = {this.handleLoginState}/>} />
           <Route path="signup" element={<Signup />} />

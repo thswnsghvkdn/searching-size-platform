@@ -24,7 +24,7 @@ function Login(props) {
             const data = { username , password };
             try {
                 // 기본 유저 모델로 회원 가입
-                const response = await Axios.post("http://localhost:8000/accounts/login/", data)
+                const response = await Axios.post("http://localhost:8000/accounts/token/", data)
                 // jwt 토큰 값 
                 const {data : {token : jwtToken}} = response;
                 // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.
@@ -43,7 +43,7 @@ function Login(props) {
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
                 });                
                 // props 변경
-                props.onLoginChange(<Nav.Link href ="/">환영해</Nav.Link>);
+                props.onLoginChange(<Nav.Link href ="/">환영</Nav.Link> , username);
                 navigate('/')
 
 

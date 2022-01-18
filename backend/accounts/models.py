@@ -12,6 +12,17 @@ class Profile(models.Model):
     height = models.IntegerField(default=0)
     weight = models.IntegerField(default=0)
     age = models.IntegerField(default=0)
+    gender = models.CharField(default='m' , max_length = 10)
+    # 검색한 선호치수
+    searchHeight = models.IntegerField(default= 0)
+    searchWeight = models.IntegerField(default= 0)
+    searchThigh = models.IntegerField(default= 0)
+    searchRise = models.IntegerField(default= 0)
+    
+    searchBack = models.IntegerField(default= 0)
+    searchShoulder = models.IntegerField(default= 0)
+    searchArm = models.IntegerField(default= 0)
+    searchChest = models.IntegerField(default= 0)
     
 
 # receiver 장식자는 기본 유저 모델과 매핑시킬 모델 인스턴스를 기본 유저 인스턴스가 생성되는 시점에 생성해주도록 한다 sender인 user 모델이 post_save signal을 보낸 후 동작

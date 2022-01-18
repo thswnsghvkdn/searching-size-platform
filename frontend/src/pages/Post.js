@@ -36,6 +36,7 @@ class Post extends React.Component {
             category: [],
             inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption}/> , // 검색창
             loadingPage : "",
+            userId : this.props.userId, // 로그인시에 넘어오는 유저 아이디
         }
         this.keyword = ""
         this.ordered = []
@@ -58,7 +59,7 @@ class Post extends React.Component {
         let clientHeight = document.documentElement.clientHeight;
 
         // 마지막 스크롤에 다다를 때 (내려온 길이와 보고있는 페이지 길이가 전체길이와 같을 때)
-        if(scrollTop + clientHeight + 10 >= scrollHeight) {
+        if(scrollTop + clientHeight  === scrollHeight) {
             // 검색이 진행 되었을 때만 검색 메소드를 다시 호출 함
             if(this.keyword){
                 if(this.cloth === "상의"){
@@ -265,7 +266,7 @@ class Post extends React.Component {
                 <div class="parent"  >
                     {/* 입력창 , 검색 후에는 navbar로 올린다 */}
                     {this.state.inputSearch} 
-                    <div class="parent2" style={{ }}>
+                    <div class="parent2" >
                         <Grid container spacing = {1} >
                             {this.state.listItem}  
                         </Grid>
