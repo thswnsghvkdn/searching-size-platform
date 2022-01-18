@@ -75,8 +75,8 @@ def mapping_size(request):
         for height in heights :
             heights[height] = sorted(heights[height].items() , key = lambda x : x[1] , reverse=True)
         # 가장 많이 검색된 수치가 저장되어 있는 인덱스 
-        #for height in heights :
-        #    print(heights[height][0][0])
+        for height in heights :
+            print(heights[height][0][0])
         print(request.user)
 
 

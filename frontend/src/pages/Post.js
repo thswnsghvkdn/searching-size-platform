@@ -188,7 +188,7 @@ class Post extends React.Component {
                             imageCard.push(<Grid item xs = {12} sm={3} ><Card 
                                 hoverable 
                                 style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
-                                cover = {<a href={this.state.responseLists.message[i].link}><img src ={this.state.responseLists.message[i].image}/></a> }
+                                cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
                                 >   
                                     {/* textLineBreak 는 개행문자 삽입 함수 */}
                                     <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
@@ -246,7 +246,7 @@ class Post extends React.Component {
                         imageCard.push(<Grid item xs = {12} sm={3} ><Card 
                             hoverable 
                             style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
-                            cover = {<a href={this.state.responseLists.message[i].link}><img src ={this.state.responseLists.message[i].image}/></a> }
+                            cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
                             >   
                                 {/* textLineBreak 는 개행문자 삽입 함수 */}
                                 <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />

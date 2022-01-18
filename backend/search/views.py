@@ -7,8 +7,12 @@ from django.http import (
 )  # django.http에서 서버의 요청에 대한 응답을 Json으로 응답하기 위해 JsonResponse 가져오기
 from django.views.decorators.csrf import csrf_exempt
 from multiprocessing import Pool
-from accounts.models import Profile
+from django.apps import apps
 
+
+# 다른 앱 모델 가져오기
+model = apps.get_model('accounts' , 'Profile')
+queryset = model.objects.all()
 
 # tensorflow 
 # import tensorflow as tf
@@ -16,7 +20,7 @@ from accounts.models import Profile
 # from tensorflow.keras.layers import Flatten, Dense
 # from tensorflow.keras.optimizers import SGD , Adam
 
-import numpy as np
+# import numpy as np
 
 # # tensorflow 이용 치수 추천 
 # @csrf_exempt

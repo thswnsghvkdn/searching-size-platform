@@ -1,0 +1,5 @@
+tensorflow
+django~=3.0.0
+djangorestframework
+djangorestframework-jwt --user
+django-cors-headers
