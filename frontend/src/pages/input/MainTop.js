@@ -21,7 +21,7 @@ function MainTop (props) {
         if(props.userId.length > 0){   
             const name = props.userId
             recommandSize(name)
-            setRecommand(["2", "@", "@", "2"])
+            //setRecommand(["2", "@", "@", "2"])
         }
     }
     async function recommandSize(name) {
@@ -35,6 +35,7 @@ function MainTop (props) {
         recommand[1] = `(${response.data.shoulder})`
         recommand[2] = `(${response.data.chest})`
         recommand[3] = `(${response.data.arm})`
+        setRecommand([`추천 : ${parseInt(response.data.back)}`, `(${parseInt(response.data.shoulder)})` , `(${parseInt(response.data.chest)})` ,`(${parseInt(response.data.arm)})`])
     }
 
     return (
