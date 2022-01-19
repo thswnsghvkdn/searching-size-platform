@@ -47,7 +47,7 @@ class Root extends React.Component {
         {/* 라우팅 컴포넌트 BrowserRouter -> Routes -> Route 순으로 컴포넌트 구성해야 합니다 */}
         <Routes>
           {/* 검색 중 일 경우 navbar에 검색 창 표시 */}
-          <Route path="/" element={<Post onSearch = {this.handleSearchState} userId = {this.userId} />} />
+          <Route path="/" element={<Post onSearch = {this.handleSearchState} userId = {this.state.userId} />} />
           {/* 로그인 컴포넌트에는 setter 함수를 전달하여 로그인 시에 props 값을 변경하도록 하였다. */}
           <Route path="login" element={<Login onLoginChange = {this.handleLoginState}/>} />
           <Route path="signup" element={<Signup />} />

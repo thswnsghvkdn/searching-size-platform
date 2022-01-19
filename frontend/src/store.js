@@ -8,7 +8,7 @@ import {getStorageItem , setStorageItem} from "./pages/utils/useLocalStorage";
 const AppContext = createContext();
 
 // 리듀서는 현재 상태와 액션 객체를 파라미터로 받아와서 새로운 상태를 반환해주는 함수
-const reducer = (prevState , action) => {
+const reducer = (prevState , action ) => {
     const { type } = action;
     if(type === SET_TOKEN){
         const { payload : jwtToken } = action;
@@ -26,6 +26,9 @@ const reducer = (prevState , action) => {
 
     return prevState;
 };
+
+
+
 
 // provider 는 리액트 앱에 store를 손쉽게 연동 할 수 있도록 도와주는 컴포넌트
 export const AppProvider = ({ children }) => {
@@ -49,6 +52,6 @@ export const useAppContext = () => useContext(AppContext);
 const SET_TOKEN = "APP/SET_TOKEN";
 const DELETE_TOKEN = "APP/DELETE_TOKEN";
 
-//     Action creators , payload 는 전송되는 데이터를 뜻 함
+//  Action creators , payload 는 전송되는 데이터를 뜻 함
 export const setToken = token => ({type :SET_TOKEN , payload : token});
 export const deleteToken = () => ({type: DELETE_TOKEN});

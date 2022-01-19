@@ -33,13 +33,13 @@ function Signup() {
             // ant-design form 에서 input 태그 입력 값들을 인수로 받을 수 있도록 해준다. 
             const { username , password , age , height , weight} = values; 
             const data = { username , password };
-            const data2 = {height , weight , age};
+            const data2 = {username, height , weight , age};
             try {
                 // 기본 유저 모델로 회원 가입
                 const response = await Axios.post("http://localhost:8000/accounts/signup/", data)
                 
                 // 토큰 값 요청 
-                const response2 =  await Axios.post("http://localhost:8000/accounts/login/", data)
+                const response2 =  await Axios.post("http://localhost:8000/accounts/token/", data)
                 // jwt 토큰 값 
                 const {data : {token : jwtToken}} = response2;
                 // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.

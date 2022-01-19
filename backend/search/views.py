@@ -11,8 +11,6 @@ from django.apps import apps
 
 
 # 다른 앱 모델 가져오기
-model = apps.get_model('accounts' , 'Profile')
-queryset = model.objects.all()
 
 # tensorflow 
 # import tensorflow as tf
@@ -62,11 +60,15 @@ def size_predict2(request):
         return  JsonResponse({"message": "Hello World"}, status=200)
 
 
+
 @csrf_exempt
 def size_search(request):
     if request.method == "GET":
         return  # JsonResponse({"message": "Hello World"}, status=200)
     elif request.method == "POST":
+        # 커리 검색 업데이트
+        model = apps.get_model('accounts' , 'Profile')
+        queryset = model.objects.all()
         # 멀티 프로세싱으로 크롤링을 빠르게
         with Pool(processes=8) as pool:
             # 여러 링크를 한번에 처리 하도록 링크 리스트와 처리함수를 pool 로 mapping 시킨다 

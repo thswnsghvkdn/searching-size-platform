@@ -34,7 +34,7 @@ class Post extends React.Component {
             ordered: [],
             responseLists: [],
             category: [],
-            inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption}/> , // 검색창
+            inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption} userId = {this.props.userId}/> , // 검색창
             loadingPage : "",
             userId : this.props.userId, // 로그인시에 넘어오는 유저 아이디
         }
@@ -96,12 +96,12 @@ class Post extends React.Component {
        if(type === "T") {
            this.cloth = "상의"
             this.setState({
-                inputSearch : <MainTop onSearch = {this.handleSize} onOption = {this.handleOption}/>
+                inputSearch : <MainTop onSearch = {this.handleSize} onOption = {this.handleOption} userId = {this.state.userId}/>
             })
         } else {
             this.cloth = "하의"
             this.setState({
-                inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption}/>
+                inputSearch : <MainBottom onSearch = {this.handleSize} onOption = {this.handleOption} userId = {this.state.userId}/>
             })
         }
     }

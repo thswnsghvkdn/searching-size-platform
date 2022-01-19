@@ -13,4 +13,5 @@ urlpatterns = [
     path("token/refresh/" , refresh_jwt_token ),
     path("token/verify/", verify_jwt_token),
     path("login/", views.login),
+    path("recommand/", views.recommand_top)
 ]

@@ -25,4 +25,4 @@ class SignupSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ("user_pk", "nickname", "height", "weight" , "age"  )
+        fields = ("username" , "user_pk", "nickname", "height", "weight" , "age"  )
