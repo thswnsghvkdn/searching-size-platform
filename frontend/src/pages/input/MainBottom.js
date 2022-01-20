@@ -28,6 +28,7 @@ class MainBottom extends React.Component {
                     <Form.Control type="text" placeholder="밑위" onChange={function (e) { this.size[3] = Number(e.target.value) }.bind(this)} style={({ margin: '0.5rem', width: '200px' })} />
                     <Button multiple onClick = {function() {this.props.onSearch(this.size , this.keyword)}.bind(this) } style={{ margin: '0.5rem', width: '200px' }}>검색</Button>
                 </Form>
+
             </>
         );
 
