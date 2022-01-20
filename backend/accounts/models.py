@@ -25,6 +25,7 @@ class Profile(models.Model):
     searchArm = models.IntegerField(default= 0)
     searchChest = models.IntegerField(default= 0)
 
+# 관계식 가중치와 편향값 
 class WeightBias(models.Model) :
     model_pk = models.IntegerField(blank = True, default = -1)
     outseamW = models.FloatField(default = 0)

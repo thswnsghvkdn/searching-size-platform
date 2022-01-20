@@ -243,6 +243,7 @@ def mapping_size(request):
         return  JsonResponse({"message": "Hello World"}, status=200)
 
 
+# 신체 종류에 대한 객체를 받아서 해당 신체치수와 가장 많이 검색된 사이즈를 토대로 직선의 가중치와 편향을 반환
 def getWeight(size_obj ) :
     # 키 값을 저장
     x_data = []
@@ -265,27 +266,39 @@ def getWeight(size_obj ) :
     a = sum([(y - y_bar) * (x - x_bar) for y, x in list(zip(t_data, x_data))])
     a /= sum([(x - x_bar) ** 2 for x in x_data])
     b = y_bar - a * x_bar
-
-
-
+    # 가중치와 편향 반환
     return (a, b)
 
 # 상의 사이즈 추천
 @csrf_exempt
-def recommand_top(request):
+def recommend_top(request):
     if request.method == "POST":
         data = json.loads(request.body)
         print(data)
+        # request body 로 넘어온 유저 이름을 이용하여 유저데이터를 가져온다
         name = data["username"]
         userModel = Profile.objects.get(username = name)
+        # 가져온 유저데이터의 키, 몸무게
         height = userModel.height
         weight = userModel.weight
 
+        # 도출한 직선의 방정식에 해당 유저의 키와 몸무게를 대입하여 결과 추천 값을 저장
         wbModel = WeightBias.objects.get(model_pk = 1)
         back = wbModel.backW * height + wbModel.backB
         arm = wbModel.armW * height + wbModel.armB
         chest = wbModel.chestW * weight + wbModel.chestB
         shoulder = wbModel.shoulderW * weight + wbModel.shoulderB
+        
+
+        # 키와 몸무게가 0 일 경우 해당 관련 사이즈는 0으로 추천된다
+        if height == 0 :
+             return  JsonResponse({"back": 0 ,"arm": 0 , "chest": chest ,"shoulder": shoulder }, status=200)
+        
+        if weight == 0 :
+             return  JsonResponse({"back": back ,"arm": arm , "chest": 0 ,"shoulder": 0 }, status=200)
+        
+
+
         #추천 사이즈 반환
         return  JsonResponse({"back": back ,"arm": arm , "chest": chest ,"shoulder": shoulder }, status=200)
 
