@@ -13,14 +13,10 @@ class NavBottom extends React.Component {
         this.input.size[0] = this.props.size[0] == -1 ? "" : this.props.size[0];
         this.input.size[1] = this.props.size[1] == -1 ? "" : this.props.size[1];
         this.input.size[2] = this.props.size[2] == -1 ? "" : this.props.size[2];
-        this.input.size[3] = this.props.size[3] == -1 ? "" : this.props.size[3];
-        
+        this.input.size[3] = this.props.size[3] == -1 ? "" : this.props.size[3];        
     }
 
-
-
     render = () => {
-        
         return (
             <>
             {/* onInput()은 입력값을 post.js로 넘겨 검색함수를 실행하는 props 함수 */}
