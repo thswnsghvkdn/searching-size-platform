@@ -263,17 +263,15 @@ class Post extends React.Component {
     render = () => {
         return (
             <div>
-                <div class="parent"  >
-                    {/* 입력창 , 검색 후에는 navbar로 올린다 */}
-                    {this.state.inputSearch} 
-                    <div class="parent2" >
-                        <Grid container spacing = {1} >
-                            {this.state.listItem}  
-                        </Grid>
-                    </div>
-                    {/* 로딩페이지 */}
-                    {this.state.loadingPage}    
+                {/* 입력창 , 검색 후에는 navbar로 올린다 */}
+                {this.state.inputSearch} 
+                <div class="parent2" >
+                    <Grid container spacing = {1} >
+                        {this.state.listItem}  
+                    </Grid>
                 </div>
+                {/* 로딩페이지 */}
+                {this.state.loadingPage}    
             </div>
         );
     }

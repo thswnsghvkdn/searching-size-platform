@@ -20,7 +20,6 @@ function MainTop (props) {
     let [sizeImage , setImage]  = useState(<SizeImage imageUrl = "url(./img/basic.png)"></SizeImage>)
 
 
-
     // 처음시작과 인수로 준 state 값이 변경 있을 때만 호출되는 useEffect
     useEffect( () =>{
         // 로그인시에 setState 
