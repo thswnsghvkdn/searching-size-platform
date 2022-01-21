@@ -17,7 +17,11 @@ function MainTop (props) {
     let size = [-1, -1, -1, -1] // 하의 사이즈 값
     // 추천값 , 로그인 시에 setter 함수가 호출된다.
     let [recommend , setRecommend]  = useState( ["" , "" , "" , ""] )
+<<<<<<< HEAD
     let [sizeImage , setImage]  = useState(<SizeImage imageUrl = "url(./img/basic.png)"></SizeImage>)
+=======
+    let [imgUrl , setUrl] = useState("")
+>>>>>>> b5ec0a81b4f9df22394ff0eb92f74de8b2717c98
 
 
     // 처음시작과 인수로 준 state 값이 변경 있을 때만 호출되는 useEffect
@@ -39,14 +43,23 @@ function MainTop (props) {
     }
 
     return (
+<<<<<<< HEAD
         <div style= {{height : '100%'  , display : 'inline-block', position :'relative',  marginTop : '10px'}}>
             {sizeImage}
             <Form style={{ position : "relative" , top :'0' , left : '10%' , display : "inline-block"}}>
+=======
+        <span style = {{display : 'inline'}}>
+            <p style = {{position : "relative" , top :'0' , left : '40%' , background : imgUrl , width : "300px" , height : "300px" , backgroundSize : "contain" , backgroundRepeat : 'no-repeat'}}>
+              <p style = {{position : "relative" , top : '36%' , left : '14.6%'  , fontFamily : "Fantasy, 궁서 , NanumGothic , Dotum", fontWeight : "bold" , color : "black", fontSize :"28px" , height : "30px" , width : "80px" , textAlign : "center"}}>100</p>
+            </p>
+            <Form style={{position : "relative" , top :'0' , left : '40%' , width : '400px'}}>
+>>>>>>> b5ec0a81b4f9df22394ff0eb92f74de8b2717c98
                 <Select name='cloth' defaultValue="상의" style={{ width: 120 , marginBottom : '1%' , marginLeft : '0.5%'}} onChange={function() {props.onOption("B")}}>
                     <Option value="상의">상의</Option>
                     <Option value="하의">하의</Option>
                 </Select>
                 <Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  keyword = e.target.value } } style={({ margin: '0.5rem', width: '200px' })} />
+<<<<<<< HEAD
                 <Form.Control type="text" placeholder={"총장 " + recommend[0]} onChange={function (e) { size[0] = Number(e.target.value) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/back.png)"  />)}} style={({ margin: '0.5rem', width: '200px' })} />
                 <Form.Control type="text" placeholder={"어깨너비 " + recommend[1] }onChange={function (e) { size[1] = Number(e.target.value) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/shoulder.png)"  />)}}  style={({ margin: '0.5rem', width: '200px' })} />
                 <Form.Control type="text" placeholder= {"가슴단면 " + recommend[2] } onChange={function (e) { size[2] = Number(e.target.value) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/chest.png)"  />)}} style={({ margin: '0.5rem', width: '200px' })} />
@@ -59,6 +72,18 @@ function MainTop (props) {
             </div>
 
         </div>
+=======
+                <Form.Control type="text" placeholder={"총장 " + recommend[0]} onChange={function (e) { size[0] = Number(e.target.value) }} onMouseOver={function() {setUrl("url(./img/back.png)")}} style={({ margin: '0.5rem', width: '200px' })} />
+                <Form.Control type="text" placeholder={"어깨너비 " + recommend[1] }onChange={function (e) { size[1] = Number(e.target.value) }} onMouseOver={function() {setUrl("url(./img/shoulder.png)")}} style={({ margin: '0.5rem', width: '200px' })} />
+                <Form.Control type="text" placeholder= {"가슴단면 " + recommend[2] } onChange={function (e) { size[2] = Number(e.target.value) }} style={({ margin: '0.5rem', width: '200px' })} />
+                <Form.Control type="text" placeholder= {"소매길이 " + recommend[3] }onChange={function (e) { size[3] = Number(e.target.value) }} style={({ margin: '0.5rem', width: '200px' })} />
+                <Button multiple onClick = {function() { props.onSearch(size , keyword)} } style={{ margin: '0.5rem', width: '200px' }}>검색</Button>
+            </Form>
+            <p style = {{position : "relative" , top :'0' , left : '40%' , background : imgUrl , width : "300px" , height : "300px" , backgroundSize : "contain" , backgroundRepeat : 'no-repeat'}}>
+                <p style = {{position : "relative" , top : '36%' , left : '14.6%'  , fontFamily : "Fantasy, 궁서 , NanumGothic , Dotum", fontWeight : "bold" , color : "black", fontSize :"28px" , height : "30px" , width : "80px" , textAlign : "center"}}>100</p>
+            </p>
+        </span>
+>>>>>>> b5ec0a81b4f9df22394ff0eb92f74de8b2717c98
     );
 
 }
