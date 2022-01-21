@@ -108,7 +108,7 @@ class Post extends React.Component {
 
     // 메인 검색 컴포넌트에 props로 넘긴 검색 창에서 받은 사이즈 
     handleSize(newSize , keyword  ) {
-        
+        debugger 
         this.size = newSize;
         this.keyword = keyword
         // 키워드가 있을 경우 검색 함수 호출

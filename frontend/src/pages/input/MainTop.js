@@ -14,8 +14,8 @@ function MainTop (props) {
     // const { store : { jwtToken }  } = useAppContext();
     
     
-    let keyword = "" // 검색 키워드
-    let size = [-1, -1, -1, -1] // 하의 사이즈 값
+    let [keyword, setKeyword] = useState("") // 검색 키워드
+    let [search , setSearch] = useState([-1, -1, -1, -1]) // 하의 사이즈 값
     // 추천값 , 로그인 시에 setter 함수가 호출된다.
     let [recommend , setRecommend]  = useState( ["" , "" , "" , ""] )
     let [userSize , setSize] = useState([0, 0])
@@ -49,6 +49,7 @@ function MainTop (props) {
         }
     }
 
+
     return (
         <div style= {{height : '100%'  , width : '80%',  display : 'flex' , flexWrap : 'nowrap', justifyContent : 'center', position :'relative',  marginTop : '10px'}}>
             {sizeImage}
@@ -57,12 +58,12 @@ function MainTop (props) {
                     <Option value="상의">상의</Option>
                     <Option value="하의">하의</Option>
                 </Select>
-                <Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  keyword = e.target.value } } style={({ margin: '0.5rem', width: '200px' })} />
-                <Form.Control type="text" placeholder={"총장 " + recommend[0]} onChange={function (e) { size[0] = Number(e.target.value) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/back.png)"  />); loginHuman("url(./img/humanBack.png)" , userSize[0] , userSize[1] , recommend[0] ) } } style={({ margin: '0.5rem', width: '200px' })} />
-                <Form.Control type="text" placeholder={"어깨너비 " + recommend[1] }onChange={function (e) { size[1] = Number(e.target.value) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/shoulder.png)"  />); loginHuman("url(./img/humanShoulder.png)" , userSize[0] , userSize[1] , recommend[1] )}}  style={({ margin: '0.5rem', width: '200px' })} />
-                <Form.Control type="text" placeholder= {"가슴단면 " + recommend[2] } onChange={function (e) { size[2] = Number(e.target.value) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/chest.png)"  />); loginHuman("url(./img/humanChest.png)" , userSize[0] , userSize[1] , recommend[2])}} style={({ margin: '0.5rem', width: '200px' })} />
-                <Form.Control type="text" placeholder= {"소매길이 " + recommend[3] }onChange={function (e) { size[3] = Number(e.target.value) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/arm.png)"  />); loginHuman("url(./img/humanArm.png)" , userSize[0] , userSize[1] , recommend[3])}} style={({ margin: '0.5rem', width: '200px' })} />
-                <Button multiple onClick = {function() { props.onSearch(size , keyword)} } style={{ margin: '0.5rem', width: '200px' }}>검색</Button>
+                <Form.Control type="text" placeholder="검색 하세요" onChange={function (e) {  setKeyword(e.target.value) } } style={({ margin: '0.5rem', width: '200px' })} />
+                <Form.Control type="text" placeholder={"총장 " + recommend[0]} onChange={function (e ) { setSearch([Number(e.target.value) , search[1] , search[2] , search[3] ] ) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/back.png)"  />); loginHuman("url(./img/humanBack.png)" , userSize[0] , userSize[1] , recommend[0] ) } } style={({ margin: '0.5rem', width: '200px' })} />
+                <Form.Control type="text" placeholder={"어깨너비 " + recommend[1] }onChange={function (e ) { setSearch([ search[0] ,Number(e.target.value) , search[2] , search[3] ] ) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/shoulder.png)"  />); loginHuman("url(./img/humanShoulder.png)" , userSize[0] , userSize[1] , recommend[1] )}}  style={({ margin: '0.5rem', width: '200px' })} />
+                <Form.Control type="text" placeholder= {"가슴단면 " + recommend[2] } onChange={function (e) { setSearch([ search[0] ,search[1] , Number(e.target.value) , search[3] ] ) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/chest.png)"  />); loginHuman("url(./img/humanChest.png)" , userSize[0] , userSize[1] , recommend[2])}} style={({ margin: '0.5rem', width: '200px' })} />
+                <Form.Control type="text" placeholder= {"소매길이 " + recommend[3] }onChange={function (e) { setSearch([ search[0] ,search[1] , search[2], Number(e.target.value)  ] ) }} onMouseOver = {function() {setImage(<SizeImage  imageUrl = "url(./img/arm.png)"  />); loginHuman("url(./img/humanArm.png)" , userSize[0] , userSize[1] , recommend[3])}} style={({ margin: '0.5rem', width: '200px' })} />
+                <Button multiple onClick = {function() { props.onSearch(search , keyword)} } style={{ margin: '0.5rem', width: '200px' }}>검색</Button>
             </Form>
             {humanImage}
         </div>
