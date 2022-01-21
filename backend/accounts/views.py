@@ -292,15 +292,15 @@ def recommend_top(request):
 
         # 키와 몸무게가 0 일 경우 해당 관련 사이즈는 0으로 추천된다
         if height == 0 :
-             return  JsonResponse({"back": 0 ,"arm": 0 , "chest": chest ,"shoulder": shoulder }, status=200)
+             return  JsonResponse({"back": 0 ,"arm": 0 , "chest": chest ,"shoulder": shoulder , "height" : height , "weight" : weight }, status=200)
         
         if weight == 0 :
-             return  JsonResponse({"back": back ,"arm": arm , "chest": 0 ,"shoulder": 0 }, status=200)
+             return  JsonResponse({"back": back ,"arm": arm , "chest": 0 ,"shoulder": 0 , "height" : height , "weight" : weight }, status=200)
         
 
 
         #추천 사이즈 반환
-        return  JsonResponse({"back": back ,"arm": arm , "chest": chest ,"shoulder": shoulder }, status=200)
+        return  JsonResponse({"back": back ,"arm": arm , "chest": chest ,"shoulder": shoulder , "height" : height , "weight" : weight }, status=200)
 
 
 
