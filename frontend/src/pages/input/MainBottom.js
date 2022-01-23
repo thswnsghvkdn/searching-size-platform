@@ -20,7 +20,7 @@ function MainBottom (props) {
     let [recommend , setRecommend]  = useState( ["" , "" , "" , ""] )
     let [userSize , setSize] = useState([0, 0])
     let [sizeImage , setImage]  = useState(<SizeImage imageUrl = "url(./img/basicBottom.png)"></SizeImage>)
-    let [humanImage , setHuman]  = useState("")
+    let [humanImage , setHuman]  = useState(<SizeImage humanUrl = "url(./img/human.png)"></SizeImage>)
 
 
 

@@ -6,7 +6,7 @@ import {  Nav } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
 import { SmileOutlined , FrownOutlined } from "@ant-design/icons"
 import { useAppContext } from "../../store"
-import {setToken } from "../../store"
+import {setToken , deleteToken} from "../../store"
 
 
 
@@ -43,7 +43,7 @@ function Login(props) {
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
                 });                
                 // props 변경
-                props.onLoginChange(<Nav.Link href ="/">환영</Nav.Link> , username);
+                props.onLoginChange(<Nav.Link href ="/" style = {{width : '100px'}}><span onClick={dispatch(deleteToken())}>logout</span></Nav.Link> , username);
                 navigate('/')
 
 
