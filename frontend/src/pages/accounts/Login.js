@@ -12,22 +12,12 @@ import { DownOutlined } from '@ant-design/icons';
 
 
 function Login(props) {
-debugger
     // redirect 용 history const
     const navigate = useNavigate();
     // AppContext 를 연결시킨 useContext
     const { dispatch } = useAppContext();
     // const [jwtToken , setJwtToken] = useLocalStorage("jwtToken", ""); // jwtToken이름으로 저장되면 디폴트 값은 "" 으로 설정
-    const menu = (
-        <Menu>
-          <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="/">
-              your profile
-            </a>
-          </Menu.Item>
-          {/* <Menu.Item danger onClick={dispatch(deleteToken())}>logout</Menu.Item> */}
-        </Menu>
-      );
+
     const onFinish = values => {
         async function fn() {
             const { username , password } = values; 
@@ -51,7 +41,16 @@ debugger
                     description : "검색 페이지로 이동합니다.",
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
                 });                
-                debugger
+                const menu = (
+                    <Menu>
+                      <Menu.Item>
+                        <a target="_blank" rel="noopener noreferrer" href="/">
+                          your profile
+                        </a>
+                      </Menu.Item>
+                      <Menu.Item danger onClick={dispatch(deleteToken)}>logout</Menu.Item>
+                    </Menu>
+                  );
                 // props 변경
                 props.onLoginChange(<Nav.Link><Dropdown overlay={menu}><a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                  <SmileOutlined />
