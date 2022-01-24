@@ -11,9 +11,9 @@ const { Option } = Select;
 
 function MainBottom (props) {
     // dispatch = useAppContext();
-    // const { store : { jwtToken }  } = useAppContext();
     
-    
+    const {store : { jwtToken }} = useAppContext();
+
     let [keyword, setKeyword] = useState("") // 검색 키워드
     let [search , setSearch] = useState([-1, -1, -1, -1]) // 하의 사이즈 값
     // 추천값 , 로그인 시에 setter 함수가 호출된다.
@@ -35,9 +35,11 @@ function MainBottom (props) {
 
     // 추천값을 서버에서 받아와 state에 반영하는 함수 
     async function recommendSize(name) {
+        
+        const headers =  { Authorization : `JWT bc003e7f05992cf849f62db6a02b34c584e1d283`};
         const response = await Axios.post("http://localhost:8000/accounts/recommend/",{
                 'username' : name,
-            })    
+            }, {headers})    
 
         // setState 
         setRecommend([`[ ${parseInt(response.data.back)} ]`, `[ ${parseInt(response.data.shoulder)} ]` , `[ ${parseInt(response.data.chest)} ]` ,`[ ${parseInt(response.data.arm)} ]`])

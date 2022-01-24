@@ -22,6 +22,7 @@ class AppHeader extends React.Component {
                 <Nav >
                     <Nav.Link href="/" >Home</Nav.Link>
                     { this.props.loginState}
+                    { this.props.logoutState}
                     {this.props.searchState}
                 </Nav>
             </Navbar>

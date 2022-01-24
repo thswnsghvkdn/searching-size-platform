@@ -7,29 +7,38 @@ import { useNavigate } from "react-router-dom"
 import { SmileOutlined , FrownOutlined } from "@ant-design/icons"
 import { useAppContext } from "../../store"
 import {setToken , deleteToken} from "../../store"
-
+import { Menu, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
 
 function Login(props) {
-
+debugger
     // redirect 용 history const
     const navigate = useNavigate();
     // AppContext 를 연결시킨 useContext
     const { dispatch } = useAppContext();
     // const [jwtToken , setJwtToken] = useLocalStorage("jwtToken", ""); // jwtToken이름으로 저장되면 디폴트 값은 "" 으로 설정
-    
+    const menu = (
+        <Menu>
+          <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="/">
+              your profile
+            </a>
+          </Menu.Item>
+          {/* <Menu.Item danger onClick={dispatch(deleteToken())}>logout</Menu.Item> */}
+        </Menu>
+      );
     const onFinish = values => {
         async function fn() {
             const { username , password } = values; 
             const data = { username , password };
             try {
                 // 기본 유저 모델로 회원 가입
-                const response = await Axios.post("http://localhost:8000/accounts/token/", data)
+                const response = await Axios.post("http://localhost:8000/accounts/login/", data)
                 // jwt 토큰 값 
-                const {data : {token : jwtToken}} = response;
+                const {data : {Token : jwtToken}} = response;
                 // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.
                 dispatch(setToken(jwtToken))
-                
                 
                 // setJwtToken(jwtToken)
                 // {data : token} ==  const token = response.data
@@ -42,8 +51,11 @@ function Login(props) {
                     description : "검색 페이지로 이동합니다.",
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
                 });                
+                debugger
                 // props 변경
-                props.onLoginChange(<Nav.Link href ="/" style = {{width : '100px'}}><span onClick={dispatch(deleteToken())}>logout</span></Nav.Link> , username);
+                props.onLoginChange(<Nav.Link><Dropdown overlay={menu}><a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                 <SmileOutlined />
+              </a></Dropdown></Nav.Link> , username);
                 navigate('/')
 
 
@@ -77,7 +89,6 @@ function Login(props) {
         rules={[
             { required: true, message: 'Please input your username!' },
             { min : 5 , message : "5글자이상 입력요~" }
-            
         ]}
         
         >

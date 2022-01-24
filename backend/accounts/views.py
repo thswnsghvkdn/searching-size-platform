@@ -13,10 +13,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import (
     JsonResponse,
 )  # django.http에서 서버의 요청에 대한 응답을 Json으로 응답하기 위해 JsonResponse 가져오기
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+
 
 # 회원가입 view
 class SignupView(CreateAPIView):
-    # 모델은 장고가 기본 제공하는 유저모델 (id 와 pw)
     model = get_user_model()
     # seliaizer 로 json 데이터를 db 인스턴스로 변환
     serializer_class = SignupSerializer
@@ -24,30 +29,23 @@ class SignupView(CreateAPIView):
     permission_classes = [
         AllowAny,
     ]
-    
+
 # accounts/views.py
 class ProfileUpdateAPI(generics.UpdateAPIView):
     lookup_field = "user_pk"
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer 
-
-@csrf_exempt
-def login(request) :
-    print(request.POST)
-    if request.method == "POST" :
-        name = request.POST['username']
-        pw = request.POST['password']
-        
-        user = authenticate(username = name , password = pw)
-        if user is not None :
-            message = "로그인"
-            login(request, user)
-            print(request.user)
-            print("login")
-            return  JsonResponse({"name": request.user}, status=200)
-        else :
-            message = "로그인"
-            return  JsonResponse({"message": message}, status=400) 
+    
+class LoginView(APIView):
+    def post(self, request):
+        # 넘어온 아이디와 비번으로 장고 authenticate가 로그인 성공시 모델 인스턴스를 반환해준다.
+        user = authenticate(username=request.data['username'], password=request.data['password'])
+        if user is not None:
+            # 로그인이 성공했을 경우 토큰을 가져온다.
+            token = Token.objects.get(user=user)
+            return Response({"Token": token.key})
+        else:
+            return Response(status=401)
         
 # height
 Outseam = {}
@@ -270,13 +268,16 @@ def getWeight(size_obj ) :
     return (a, b)
 
 # 상의 사이즈 추천
-@csrf_exempt
-def recommend_top(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        print(data)
+# @csrf_exempt
+# def recommend_top(request):
+class recommend_top(APIView):
+
+    def post(self, request, format = None):
+        print(request.user)
+        print(request.auth)
+        
         # request body 로 넘어온 유저 이름을 이용하여 유저데이터를 가져온다
-        name = data["username"]
+        name = 'test1'
         userModel = Profile.objects.get(username = name)
         # 가져온 유저데이터의 키, 몸무게
         height = userModel.height

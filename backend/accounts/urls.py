@@ -12,6 +12,6 @@ urlpatterns = [
     path("mapping/" , views.mapping_size),
     path("token/refresh/" , refresh_jwt_token ),
     path("token/verify/", verify_jwt_token),
-    path("login/", views.login),
-    path("recommend/", views.recommend_top)
+    path("login/", views.LoginView.as_view()),
+    path("recommend/", views.recommend_top.as_view())
 ]

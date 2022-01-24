@@ -14,6 +14,7 @@ class Root extends React.Component {
     super(props);
     // state 끌어올리기, 헤더 loginState 를 부모 컴포넌트인 root에서 관리
     this.handleLoginState = this.handleLoginState.bind(this);
+
     this.handleSearchState = this.handleSearchState.bind(this);
     
     
