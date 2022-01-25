@@ -54,6 +54,7 @@ class WeightBias(models.Model) :
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance, user_pk=instance.id)
+        # 기본 유저모델이 생겼다면 토큰도 생성하기
         Token.objects.create(user=instance)
 
 

@@ -277,7 +277,7 @@ class recommend_top(APIView):
         print(request.auth)
         
         # request body 로 넘어온 유저 이름을 이용하여 유저데이터를 가져온다
-        name = 'test1'
+        name = request.user
         userModel = Profile.objects.get(username = name)
         # 가져온 유저데이터의 키, 몸무게
         height = userModel.height

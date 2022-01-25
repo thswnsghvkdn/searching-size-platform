@@ -23,7 +23,6 @@ const reducer = (prevState , action ) => {
             setStorageItem("jwtToken" , "");
         });
     }
-
     return prevState;
 };
 

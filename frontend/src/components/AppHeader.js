@@ -10,10 +10,6 @@ class AppHeader extends React.Component {
         super(props)
     }
     
-    // 로그인이 되어있을 경우 사용자 이름 보이기
-    checkUser = () => {
-        this.dispatch(deleteToken())
-    }
 
     render = () => {
         return (
@@ -22,7 +18,6 @@ class AppHeader extends React.Component {
                 <Nav >
                     <Nav.Link href="/" >Home</Nav.Link>
                     { this.props.loginState}
-                    { this.props.logoutState}
                     {this.props.searchState}
                 </Nav>
             </Navbar>

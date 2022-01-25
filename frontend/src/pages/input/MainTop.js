@@ -3,49 +3,64 @@ import { Button, Form } from 'react-bootstrap'
 import { Select  } from 'antd';
 import SizeImage from "./images/SizeImage";
 import HumanImage from "./images/HumanImage";
-import { useAppContext } from "../../store";
+import { useAppContext , setToken } from "../../store";
 import Axios from "axios"
 import { ReconciliationFilled } from "@ant-design/icons";
 const { Option } = Select;
 
 
 function MainTop (props) {
-    // dispatch = useAppContext();
-    // const { store : { jwtToken }  } = useAppContext();
+    const { dispatch } = useAppContext();
     
-    
+    const {store : { jwtToken }} = useAppContext();
+
     let [keyword, setKeyword] = useState("") // 검색 키워드
     let [search , setSearch] = useState([-1, -1, -1, -1]) // 하의 사이즈 값
     // 추천값 , 로그인 시에 setter 함수가 호출된다.
     let [recommend , setRecommend]  = useState( ["" , "" , "" , ""] )
     let [userSize , setSize] = useState([0, 0])
     let [sizeImage , setImage]  = useState(<SizeImage imageUrl = "url(./img/basic.png)"></SizeImage>)
-    let [humanImage , setHuman]  = useState(<SizeImage humanUrl = "url(./img/human.png)"></SizeImage>)
+    let [humanImage , setHuman]  = useState("")
 
 
 
-    // 처음시작과 인수로 준 state 값이 변경 있을 때만 호출되는 useEffect
+    // 처음시작과 인수로 준 state(추천사이즈) 값이 변경 있을 때만 호출되는 useEffect
     useEffect( () =>{
         // 로그인시에 setState 
-        if (props.userId.length > 0) {
-            recommendSize(props.userId)
+        if (jwtToken.length > 0) {            
+            recommendSize()
         }
     },recommend)// 인수로 넘긴 데이터가 변경될 때만 useEffect는 호출 됨
 
+
+    // 처음시작과 인수로 준 state(추천사이즈) 값이 변경 있을 때만 호출되는 useEffect
+    useEffect( () =>{
+        // 로그인시에 setState 
+        if (jwtToken.length > 0) {
+            setHuman(<HumanImage humanUrl = "url(./img/human.png)" humanHeight = {userSize[0]} humanWeight = {userSize[1]} humanSize = {"를 추천합니다"} />)
+        }
+    },userSize)
+
+
+    
     // 추천값을 서버에서 받아와 state에 반영하는 함수 
-    async function recommendSize(name) {
+    async function recommendSize() {
+
+        // 로그인 인증을 위해 토큰을 헤더에 심는다
+        const headers =  { Authorization : `Token ${jwtToken}`};
         const response = await Axios.post("http://localhost:8000/accounts/recommend/",{
-                'username' : name,
-            })    
+                'Token' : jwtToken,
+            }, {headers})    
+
 
         // setState 
         setRecommend([`[ ${parseInt(response.data.back)} ]`, `[ ${parseInt(response.data.shoulder)} ]` , `[ ${parseInt(response.data.chest)} ]` ,`[ ${parseInt(response.data.arm)} ]`])
         setSize([response.data.height , response.data.weight])
     }
 
-    function loginHuman(url , height , weight , recom  , rep , siz) {
-        if(props.userId.length > 0){
-            setHuman(<HumanImage humanUrl = {url} humanHeight = {height} humanWeight = {weight} humanSize = {recom} repeat = {rep} size = {siz} />)
+    function loginHuman(url , height , weight , recom ) {
+        if(jwtToken.length > 0){
+            setHuman(<HumanImage humanUrl = {url} humanHeight = {height} humanWeight = {weight} humanSize = {recom} />)
         }
     }
 

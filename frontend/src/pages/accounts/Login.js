@@ -9,6 +9,8 @@ import { useAppContext } from "../../store"
 import {setToken , deleteToken} from "../../store"
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import Identicon from 'react-identicons'
+
 
 
 function Login(props) {
@@ -25,7 +27,7 @@ function Login(props) {
             try {
                 // 기본 유저 모델로 회원 가입
                 const response = await Axios.post("http://localhost:8000/accounts/login/", data)
-                // jwt 토큰 값 
+                // jwt 토큰 값을 response에서 가져온다 
                 const {data : {Token : jwtToken}} = response;
                 // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.
                 dispatch(setToken(jwtToken))
@@ -41,20 +43,9 @@ function Login(props) {
                     description : "검색 페이지로 이동합니다.",
                     icon: <SmileOutlined style= {{ color : "#108ee9"}}/>
                 });                
-                const menu = (
-                    <Menu>
-                      <Menu.Item>
-                        <a target="_blank" rel="noopener noreferrer" href="/">
-                          your profile
-                        </a>
-                      </Menu.Item>
-                      <Menu.Item danger onClick={dispatch(deleteToken)}>logout</Menu.Item>
-                    </Menu>
-                  );
-                // props 변경
-                props.onLoginChange(<Nav.Link><Dropdown overlay={menu}><a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                 <SmileOutlined />
-              </a></Dropdown></Nav.Link> , username);
+ 
+                // 로그인이 성공한다면 링크를 logout으로 변경
+                props.onLoginChange(<Nav.Link href = '/' onClick={ function() {dispatch({type : "APP/DELETE_TOKEN"})}}><Identicon size ={20} string ={jwtToken}  fg ={"rgba(255,255,255,.55)"}/></Nav.Link> , username);                
                 navigate('/')
 
 
