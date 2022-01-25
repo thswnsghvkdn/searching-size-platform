@@ -1,6 +1,6 @@
 import React from "react"
 import { FrownOutlined } from "@ant-design/icons"
-import { Card, notification } from 'antd'
+import { Card, notification , Tooltip } from 'antd'
 import { Grid } from "@material-ui/core";
 import { textLineBreak } from "./textLineBreak";
 import NavTop from "./input/NavTop"
@@ -108,7 +108,6 @@ class Post extends React.Component {
 
     // 메인 검색 컴포넌트에 props로 넘긴 검색 창에서 받은 사이즈 
     handleSize(newSize , keyword  ) {
-        debugger 
         this.size = newSize;
         this.keyword = keyword
         // 키워드가 있을 경우 검색 함수 호출
@@ -180,19 +179,19 @@ class Post extends React.Component {
 
                         for (let i = 0; i < this.state.responseLists.message.length; i++) {
                             // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
-                            if(this.state.responseLists.message[i] === null) continue
+                            if(this.state.responseLists.message[i] === null || this.state.responseLists.message[i].image === "" ) continue
                             // 서버에서 응답받은 가장 적합한 사이즈
                             const title1 = "Outseam " + parseInt(this.state.responseLists.message[i].size[0]) + " Thigh " + parseInt(this.state.responseLists.message[i].size[1]) +"\nWaist " + parseInt(this.state.responseLists.message[i].size[2]) + " Rise " + parseInt(this.state.responseLists.message[i].size[3]);
                             
                             // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
-                            imageCard.push(<Grid item xs = {12} sm={3} ><Card 
+                            imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].diff} color = "blue" key="blue"><Card 
                                 hoverable 
                                 style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
                                 cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
                                 >   
                                     {/* textLineBreak 는 개행문자 삽입 함수 */}
                                     <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
-                                </Card></Grid> )
+                                </Card></Tooltip></Grid> )
                         }
                         imageCard.push(<div ref = {this.ref} />)
                         this.setState({
@@ -238,19 +237,19 @@ class Post extends React.Component {
 
                     for (let i = 0; i < this.state.responseLists.message.length; i++) {
                         // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
-                        if(this.state.responseLists.message[i] === null) continue
+                        if(this.state.responseLists.message[i] === null || this.state.responseLists.message[i].image === "" ) continue
                         // 서버에서 응답받은 가장 적합한 사이즈
                         const title1 = "Back " + parseInt(this.state.responseLists.message[i].size[0]) + " Shoulder " + parseInt(this.state.responseLists.message[i].size[1]) +"\nChest " + parseInt(this.state.responseLists.message[i].size[2]) + " Sleeve " + parseInt(this.state.responseLists.message[i].size[3]);
                         
                         // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
-                        imageCard.push(<Grid item xs = {12} sm={3} ><Card 
+                        imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].diff} color = "blue" key="blue"><Card 
                             hoverable 
                             style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
                             cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
                             >   
                                 {/* textLineBreak 는 개행문자 삽입 함수 */}
                                 <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
-                            </Card></Grid> )
+                            </Card></Tooltip></Grid> )
                     }
                     imageCard.push(<div ref = {this.ref} />)
                     this.setState({

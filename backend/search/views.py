@@ -119,7 +119,6 @@ def make_link(request) :
 def filter_size(obj) :
     data = obj["data"]
     title = obj["title"]
-    print(title)
     # 각 상품의 정보 (링크 , 이미지 , 수치오차)
     goodsInfo = {"image": "", "link": "", "diff": 0, "title": "", "price": "" , "size" : [0,0,0,0]}
     # 10개까지 받아오기
@@ -138,8 +137,14 @@ def filter_size(obj) :
     goodsSize = soup.find_all(
         "td", attrs={"class": "goods_size_val"}
     )  # 사이즈들을 1차원 배열로 한번에 받아오기
-
-
+    totalGoodsSize = soup.find_all(
+        "table" , attrs = {"id" : "size_table"}
+    )
+    for tt in totalGoodsSize :
+        #print(tt.get("th"))
+        print(tt)
+        print(tt["th"])
+        
     # 사이즈별 인덱스찾기
     if len(sizeTitle) <= 0:
         return  # 임시방편 NameError 예외처리
@@ -170,13 +175,11 @@ def filter_size(obj) :
     tot = 0
     index = 0
     min_tot = 100000  # 오차 중 가장 작은 오차값
-    minSize = [0,0,0,0]
+    minSize = [0,0,0,0] # 가장 적합한 사이즈를 찾는다.
     for size in goodsSize:
-
         # 각 부위별 인덱스에 대한 분기 사용자가 특정 부위에 대한 입력을 하지 않을 경우 스킵( abs(data[]) > 1 )
         if index == osIndex :
             minSize[0] = float(size.get_text())
-            print(minSize[0])
             if abs(data["os"] > 1) :
                 tot += abs(data["os"] - float(size.get_text()))
         elif index == rsIndex :
@@ -202,11 +205,13 @@ def filter_size(obj) :
                 goodsInfo["size"][3] = minSize[3]
             index = 0
             tot = 0
-    goodsInfo["diff"] = min_tot
-    goodsInfo["link"] = title["href"]
-    goodsInfo["image"] = title["img"]
-    goodsInfo["title"] = title["name"]
-    goodsInfo["price"] = title["price"]
+    if min_tot < 5  : # 사이즈가 5 이하인 것만 추천
+        goodsInfo["diff"] = min_tot
+        goodsInfo["link"] = title["href"]
+        goodsInfo["image"] = title["img"]
+        goodsInfo["title"] = title["name"]
+        goodsInfo["price"] = title["price"]     
+    
     # 해당 제품의 정보들을 리스트에 담아 response
     return goodsInfo
 
@@ -216,7 +221,6 @@ def filter_size(obj) :
 def filter_size2(obj) :
     data = obj["data"]
     title = obj["title"]
-    print(title)
     # 각 상품의 정보 (링크 , 이미지 , 수치오차)
     goodsInfo = {"image": "", "link": "", "diff": 0, "title": "", "price": "" , "size" : [0,0,0,0]}
     # 10개까지 받아오기
@@ -235,7 +239,12 @@ def filter_size2(obj) :
     goodsSize = soup.find_all(
         "td", attrs={"class": "goods_size_val"}
     )  # 사이즈들을 1차원 배열로 한번에 받아오기
-
+    totalGoodsSize = soup.find_all(
+        "table" , attrs = {"id" : "size_table"}
+    )
+    for tt in totalGoodsSize :
+        print(tt.get("th"))
+        print(tt["th"])
 
     # 사이즈별 인덱스찾기
     if len(sizeTitle) <= 0:
@@ -274,7 +283,6 @@ def filter_size2(obj) :
         # 각 부위별 인덱스에 대한 분기 사용자가 특정 부위에 대한 입력을 하지 않을 경우 스킵( abs(data[]) > 1 )
         if index == osIndex :
             minSize[0] = float(size.get_text())
-            print(minSize[0])
             if abs(data["os"] > 1) :
                 tot += abs(data["os"] - float(size.get_text()))
         elif index == arIndex :
@@ -300,11 +308,13 @@ def filter_size2(obj) :
                 goodsInfo["size"][3] = minSize[3]
             index = 0
             tot = 0
-    goodsInfo["diff"] = min_tot
-    goodsInfo["link"] = title["href"]
-    goodsInfo["image"] = title["img"]
-    goodsInfo["title"] = title["name"]
-    goodsInfo["price"] = title["price"]
+    if min_tot < 5 : # 사이즈가 5 이하인 것만 추천
+        goodsInfo["diff"] = min_tot
+        goodsInfo["link"] = title["href"]
+        goodsInfo["image"] = title["img"]
+        goodsInfo["title"] = title["name"]
+        goodsInfo["price"] = title["price"]
+        
     # 해당 제품의 정보들을 리스트에 담아 response
     return goodsInfo
 
