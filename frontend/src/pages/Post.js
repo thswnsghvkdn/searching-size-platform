@@ -161,8 +161,29 @@ class Post extends React.Component {
                         // 리스트 추가
                         let imageCard = this.state.listItem
                         
+
+                        let newCardCount = 0 // 새로 추가 될 카드 카운트 8개 미만이면 알아서 다시한번 호출
+
+                        for (let i = 0; i < this.state.responseLists.message.length; i++) {
+                            // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
+                            if(this.state.responseLists.message[i] === null || this.state.responseLists.message[i].image === "" ) continue
+                            // 서버에서 응답받은 가장 적합한 사이즈
+                            const title1 = "Outseam " + parseInt(this.state.responseLists.message[i].size[0]) + " Thigh " + parseInt(this.state.responseLists.message[i].size[1]) +"\nWaist " + parseInt(this.state.responseLists.message[i].size[2]) + " Rise " + parseInt(this.state.responseLists.message[i].size[3]);
+                            
+                            newCardCount += 1
+                            // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
+                            imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].sizeType + "사이즈 추천"} color = "blue" key="blue"><Card 
+                                hoverable 
+                                style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
+                                cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
+                                >   
+                                    {/* textLineBreak 는 개행문자 삽입 함수 */}
+                                    <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
+                                </Card></Tooltip></Grid> )
+                        }
+
                         // 검색 결과가 없을 때
-                        if(this.state.responseLists.message.length === 0 )
+                        if(this.state.responseLists.message.length === 0 ||  newCardCount === 0 )
                         {
                             // 로딩페이지 끄기
                             this.setState({
@@ -176,27 +197,16 @@ class Post extends React.Component {
                             });
                         }
 
-
-                        for (let i = 0; i < this.state.responseLists.message.length; i++) {
-                            // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
-                            if(this.state.responseLists.message[i] === null || this.state.responseLists.message[i].image === "" ) continue
-                            // 서버에서 응답받은 가장 적합한 사이즈
-                            const title1 = "Outseam " + parseInt(this.state.responseLists.message[i].size[0]) + " Thigh " + parseInt(this.state.responseLists.message[i].size[1]) +"\nWaist " + parseInt(this.state.responseLists.message[i].size[2]) + " Rise " + parseInt(this.state.responseLists.message[i].size[3]);
-                            
-                            // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
-                            imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].diff} color = "blue" key="blue"><Card 
-                                hoverable 
-                                style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
-                                cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
-                                >   
-                                    {/* textLineBreak 는 개행문자 삽입 함수 */}
-                                    <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
-                                </Card></Tooltip></Grid> )
-                        }
-                        imageCard.push(<div ref = {this.ref} />)
+                        
                         this.setState({
                             listItem: imageCard,
                         })
+
+                        // 몇개 안들어오면 다시 호출
+                        if(newCardCount > 0 && newCardCount <= 8 ) {
+                            this.attendance()
+                        }
+
                     })
              this.page += 1
     }
@@ -210,7 +220,7 @@ class Post extends React.Component {
             this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
         }
 
-        Axios.post(apiUrl2, { keyword: this.keyword, os: this.size[0], sh: this.size[1], ch: this.size[2], ar: this.size[3], page : this.page })
+        Axios.post(apiUrl2, { keyword: this.keyword, ba : this.size[0], sh: this.size[1], ch: this.size[2], ar: this.size[3], page : this.page })
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
                     this.setState({
@@ -219,8 +229,30 @@ class Post extends React.Component {
                     // 리스트 추가
                     let imageCard = this.state.listItem
                     
+
+                    let newCardCount = 0 // 새로 추가 될 카드 카운트 8개 미만이면 알아서 다시한번 호출
+
+
+                    for (let i = 0; i < this.state.responseLists.message.length; i++) {
+                        // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
+                        if(this.state.responseLists.message[i] === null || this.state.responseLists.message[i].image === "" ) continue
+                        // 서버에서 응답받은 가장 적합한 사이즈
+                        const title1 = "Back " + parseInt(this.state.responseLists.message[i].size[0]) + " Shoulder " + parseInt(this.state.responseLists.message[i].size[1]) +"\nChest " + parseInt(this.state.responseLists.message[i].size[2]) + " Sleeve " + parseInt(this.state.responseLists.message[i].size[3]);
+                        
+                        newCardCount += 1
+                        // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
+                        imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].sizeType + "사이즈 추천"} color = "blue" key="blue"><Card 
+                            hoverable 
+                            style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
+                            cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
+                            >   
+                                {/* textLineBreak 는 개행문자 삽입 함수 */}
+                                <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
+                            </Card></Tooltip></Grid> )
+                    }
+
                     // 검색 결과가 없을 때
-                    if(this.state.responseLists.message.length === 0 )
+                    if(this.state.responseLists.message.length === 0 ||  newCardCount === 0 )
                     {
                         // 로딩페이지 끄기
                         this.setState({
@@ -234,27 +266,15 @@ class Post extends React.Component {
                         });
                     }
 
-
-                    for (let i = 0; i < this.state.responseLists.message.length; i++) {
-                        // 사이즈가 없어서 빈 값으로 넘어온 경우 skip
-                        if(this.state.responseLists.message[i] === null || this.state.responseLists.message[i].image === "" ) continue
-                        // 서버에서 응답받은 가장 적합한 사이즈
-                        const title1 = "Back " + parseInt(this.state.responseLists.message[i].size[0]) + " Shoulder " + parseInt(this.state.responseLists.message[i].size[1]) +"\nChest " + parseInt(this.state.responseLists.message[i].size[2]) + " Sleeve " + parseInt(this.state.responseLists.message[i].size[3]);
-                        
-                        // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
-                        imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].diff} color = "blue" key="blue"><Card 
-                            hoverable 
-                            style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
-                            cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
-                            >   
-                                {/* textLineBreak 는 개행문자 삽입 함수 */}
-                                <Meta title={textLineBreak(title1)} description= {Number(this.state.responseLists.message[i].price).toLocaleString() + "￦"} />
-                            </Card></Tooltip></Grid> )
-                    }
-                    imageCard.push(<div ref = {this.ref} />)
                     this.setState({
                         listItem: imageCard,
                     })
+
+                    // 몇개 안들어오면 다시 호출
+                    if(newCardCount > 0 && newCardCount <= 8 ) {
+                        this.attendance2()
+                    }
+
                 })
             this.page += 1
     }

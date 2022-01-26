@@ -119,8 +119,8 @@ def make_link(request) :
 def filter_size(obj) :
     data = obj["data"]
     title = obj["title"]
-    # 각 상품의 정보 (링크 , 이미지 , 수치오차)
-    goodsInfo = {"image": "", "link": "", "diff": 0, "title": "", "price": "" , "size" : [0,0,0,0]}
+    # 각 상품의 정보 (링크 , 이미지 , 수치오차 , 추천되는 사이즈 타입(s,m,l) )
+    goodsInfo = {"image": "", "link": "", "diff": 0, "title": "", "price": "" , "size" : [0,0,0,0] , "sizeType" : ""}
     # 10개까지 받아오기
     # useragent 로 불순한 의도가 아님을 증명하기
     headers = {
@@ -137,14 +137,12 @@ def filter_size(obj) :
     goodsSize = soup.find_all(
         "td", attrs={"class": "goods_size_val"}
     )  # 사이즈들을 1차원 배열로 한번에 받아오기
-    totalGoodsSize = soup.find_all(
-        "table" , attrs = {"id" : "size_table"}
-    )
-    for tt in totalGoodsSize :
-        #print(tt.get("th"))
-        print(tt)
-        print(tt["th"])
-        
+
+    # 사이즈 테이블 헤더 (사이즈 종류 s,m,l) 가져오기
+    sizeCategory = soup.select('#size_table > tbody > tr > th')
+    if len(sizeCategory) > 0 :
+        sizeCategory = sizeCategory[1:]
+
     # 사이즈별 인덱스찾기
     if len(sizeTitle) <= 0:
         return  # 임시방편 NameError 예외처리
@@ -170,12 +168,23 @@ def filter_size(obj) :
         index += 1
     # 해당 제품의 정보 링크 , 이미지 , 수치 오차
 
-    # 상품정보저장
-    row = len(sizeTitle)
+    # 하의 제품이 아닌경우 허벅지 , 밑위 , 허리에 대한 인덱스가 나오지 않는다 고로 그냥 return
+    if(thIndex == -1 and rsIndex == -1 and wsIndex == -1) :
+        return goodsInfo
+
+    # col은 테이블의 열(총장 , 어깨 ,가슴 ...) 개수 
+    col = len(sizeTitle) 
+    # row는 각 사이즈(s, m ,l) 개수 
+    row = 0
+
     tot = 0
     index = 0
     min_tot = 100000  # 오차 중 가장 작은 오차값
     minSize = [0,0,0,0] # 가장 적합한 사이즈를 찾는다.
+    
+
+    
+    # goodsSize는 사이즈가 s,m,l 구분없이 list로 들어있다.
     for size in goodsSize:
         # 각 부위별 인덱스에 대한 분기 사용자가 특정 부위에 대한 입력을 하지 않을 경우 스킵( abs(data[]) > 1 )
         if index == osIndex :
@@ -194,17 +203,26 @@ def filter_size(obj) :
             minSize[1] = float(size.get_text())
             if abs(data["th"] > 1) :
                 tot += abs(data["th"] - float(size.get_text()))
-
+        
+        # 인덱스는 0 부터 컬럼수 만큼 반복한다
         index += 1
-        if index >= row:
-            if(tot <= min_tot) : # 가장 차이가 작은 값을 갱신하며 가장 차이가 작은 적합 사이즈를 추천해주기 위해 저장한다.
+        # 한 컬럼(s,m,l)을 반복한 경우  
+        if index == col:
+            if(tot < min_tot) : # 가장 차이가 작은 값을 갱신하며 가장 차이가 작은 적합 사이즈를 추천해주기 위해 저장한다.
                 min_tot = tot
                 goodsInfo["size"][0] = minSize[0]
                 goodsInfo["size"][1] = minSize[1]
                 goodsInfo["size"][2] = minSize[2]
                 goodsInfo["size"][3] = minSize[3]
+                
+                # sizeType 저장
+                if(row < len(sizeCategory)) :
+                    goodsInfo["sizeType"] = sizeCategory[row].get_text()
+                
+                
             index = 0
             tot = 0
+            row += 1
     if min_tot < 5  : # 사이즈가 5 이하인 것만 추천
         goodsInfo["diff"] = min_tot
         goodsInfo["link"] = title["href"]
@@ -239,18 +257,17 @@ def filter_size2(obj) :
     goodsSize = soup.find_all(
         "td", attrs={"class": "goods_size_val"}
     )  # 사이즈들을 1차원 배열로 한번에 받아오기
-    totalGoodsSize = soup.find_all(
-        "table" , attrs = {"id" : "size_table"}
-    )
-    for tt in totalGoodsSize :
-        print(tt.get("th"))
-        print(tt["th"])
+
+    # 사이즈 테이블 헤더 (사이즈 종류 s,m,l) 가져오기
+    sizeCategory = soup.select('#size_table > tbody > tr > th')
+    if len(sizeCategory) > 0 :
+        sizeCategory = sizeCategory[1:]
 
     # 사이즈별 인덱스찾기
     if len(sizeTitle) <= 0:
         return  # 임시방편 NameError 예외처리
 
-    osIndex = -1 # 총장
+    baIndex = -1 # 총장
     shIndex = -1 # 어깨 인덱스
     chIndex = -1 # 가슴 인덱스
     arIndex = -1 # 소매 인덱스
@@ -262,7 +279,7 @@ def filter_size2(obj) :
         text = i.get_text()
         # size table title에 각 단어가 있는지 판별하여 index위치를 찾아내기
         if text.find("총") >= 0 and text.find("장") >= 0:
-            osIndex = index
+            baIndex = index
         elif text.find("어깨") >= 0:
             shIndex = index
         elif text.find("가슴") >= 0:
@@ -271,20 +288,31 @@ def filter_size2(obj) :
             arIndex = index
         index += 1
     # 해당 제품의 정보 링크 , 이미지 , 수치 오차
+    
+    
+    # 하의 제품이 아닌경우 허벅지 , 밑위 , 허리에 대한 인덱스가 나오지 않는다 고로 그냥 return
+    if(shIndex == -1 and chIndex == -1 and arIndex == -1) :
+        return goodsInfo
 
-    # 상품정보저장
-    row = len(sizeTitle)
+    # col은 테이블의 열(총장 , 어깨 ,가슴 ...) 개수 
+    col = len(sizeTitle) 
+    # row는 각 사이즈(s, m ,l) 개수 
+    row = 0
+
     tot = 0
     index = 0
     min_tot = 100000  # 오차 중 가장 작은 오차값
-    minSize = [0,0,0,0]
-    for size in goodsSize:
+    minSize = [0,0,0,0] # 가장 적합한 사이즈를 찾는다.
+    
 
+    
+    # goodsSize는 사이즈가 s,m,l 구분없이 list로 들어있다.
+    for size in goodsSize:
         # 각 부위별 인덱스에 대한 분기 사용자가 특정 부위에 대한 입력을 하지 않을 경우 스킵( abs(data[]) > 1 )
-        if index == osIndex :
+        if index == baIndex :
             minSize[0] = float(size.get_text())
-            if abs(data["os"] > 1) :
-                tot += abs(data["os"] - float(size.get_text()))
+            if abs(data["ba"] > 1) :
+                tot += abs(data["ba"] - float(size.get_text()))
         elif index == arIndex :
             minSize[3] = float(size.get_text())
             if abs(data["ar"] > 1) :
@@ -297,18 +325,25 @@ def filter_size2(obj) :
             minSize[1] = float(size.get_text())
             if abs(data["sh"] > 1) :
                 tot += abs(data["sh"] - float(size.get_text()))
-
+        
+        # 인덱스는 0 부터 컬럼수 만큼 반복한다
         index += 1
-        if index >= row:
-            if(tot <= min_tot) : # 가장 차이가 작은 값을 갱신하며 가장 차이가 작은 적합 사이즈를 추천해주기 위해 저장한다.
+        # 한 컬럼(s,m,l)을 반복한 경우  
+        if index == col:
+            if(tot < min_tot) : # 가장 차이가 작은 값을 갱신하며 가장 차이가 작은 적합 사이즈를 추천해주기 위해 저장한다.
                 min_tot = tot
                 goodsInfo["size"][0] = minSize[0]
                 goodsInfo["size"][1] = minSize[1]
                 goodsInfo["size"][2] = minSize[2]
                 goodsInfo["size"][3] = minSize[3]
+                
+                # sizeType 저장
+                if(row < len(sizeCategory)) :
+                    goodsInfo["sizeType"] = sizeCategory[row].get_text()
             index = 0
             tot = 0
-    if min_tot < 5 : # 사이즈가 5 이하인 것만 추천
+            row += 1
+    if min_tot < 5  : # 사이즈가 5 이하인 것만 추천
         goodsInfo["diff"] = min_tot
         goodsInfo["link"] = title["href"]
         goodsInfo["image"] = title["img"]
