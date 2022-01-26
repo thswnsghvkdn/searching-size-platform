@@ -261,7 +261,7 @@ def filter_size2(obj) :
     # 사이즈 테이블 헤더 (사이즈 종류 s,m,l) 가져오기
     sizeCategory = soup.select('#size_table > tbody > tr > th')
     if len(sizeCategory) > 0 :
-        sizeCategory = sizeCategory[1:]
+        sizeCategory = sizeCategory[1:] # 0번째에는 my 라고 들어있음 , 제외
 
     # 사이즈별 인덱스찾기
     if len(sizeTitle) <= 0:
@@ -339,10 +339,13 @@ def filter_size2(obj) :
                 
                 # sizeType 저장
                 if(row < len(sizeCategory)) :
+                    # 가장 작은 row로 판명되면 카테고리 저장
                     goodsInfo["sizeType"] = sizeCategory[row].get_text()
             index = 0
             tot = 0
             row += 1
+
+            
     if min_tot < 5  : # 사이즈가 5 이하인 것만 추천
         goodsInfo["diff"] = min_tot
         goodsInfo["link"] = title["href"]

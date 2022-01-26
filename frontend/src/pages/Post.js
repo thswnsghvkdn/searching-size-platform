@@ -171,8 +171,8 @@ class Post extends React.Component {
                             const title1 = "Outseam " + parseInt(this.state.responseLists.message[i].size[0]) + " Thigh " + parseInt(this.state.responseLists.message[i].size[1]) +"\nWaist " + parseInt(this.state.responseLists.message[i].size[2]) + " Rise " + parseInt(this.state.responseLists.message[i].size[3]);
                             
                             newCardCount += 1
-                            // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
-                            imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].sizeType + "사이즈 추천"} color = "blue" key="blue"><Card 
+                            // 이미지 카드 생성 12 칸을 3칸씩 나눕니다   툴팁은 사이즈 카테고리를 나타냅니다
+                            imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].sizeType + " 사이즈 추천"} color = "blue" key="blue"><Card 
                                 hoverable 
                                 style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
                                 cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
@@ -241,7 +241,7 @@ class Post extends React.Component {
                         
                         newCardCount += 1
                         // 이미지 카드 생성 12 칸을 3칸씩 나눕니다
-                        imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].sizeType + "사이즈 추천"} color = "blue" key="blue"><Card 
+                        imageCard.push(<Grid item xs = {12} sm={3} ><Tooltip title = {this.state.responseLists.message[i].sizeType + " 사이즈 추천"} color = "blue" key="blue"><Card 
                             hoverable 
                             style ={{width : 220 , margin : "auto"}} // grid의 자식 card 를 margin auto로 가운데 정렬
                             cover = {<a href={this.state.responseLists.message[i].link} target={"_blank"}><img src ={this.state.responseLists.message[i].image}/></a> }
