@@ -33,8 +33,10 @@ const reducer = (prevState , action ) => {
 export const AppProvider = ({ children }) => {
     // store 는 컴포넌트에서 사용할 수 있는 상태 , dispatch 는 액션을 발생 시키는 함수 (reducer 함수에 인자를 넣어 사용)
     // useContext로 다른 컴포넌트에서 dispatch 라는 setter 함수를 사용 가능토록 합니다
+    const jwtToken = getStorageItem('jwtToken' , "");
     const [store , dispatch] = useReducerWithSideEffects(reducer, {
-        jwtToken : getStorageItem("jwtToken" , ""),
+        jwtToken,
+        isAuthenticated : jwtToken.length > 0
     });
 
     return (

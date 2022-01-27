@@ -20,6 +20,13 @@ from rest_framework.response import Response
 
 
 
+# 토큰을 가져오는 view 
+class TokenView(APIView) :
+    def post(self , request) :
+        user = authenticate(username=request.data['username'], password=request.data['password'])
+        token = Token.objects.get(user=user)
+        return Response({"Token": token.key})
+
 # 회원가입 view
 class SignupView(CreateAPIView):
     model = get_user_model()
@@ -29,6 +36,9 @@ class SignupView(CreateAPIView):
     permission_classes = [
         AllowAny,
     ]
+
+
+
 
 # accounts/views.py
 class ProfileUpdateAPI(generics.UpdateAPIView):
@@ -188,6 +198,8 @@ def mapping_size(request):
         for height in Arm :
             Arm[height] = sorted(Arm[height].items() , key = lambda x : x[1] , reverse=True)
         
+        print("rise ")
+        print(Rise)
 
         for weight in Thigh :
             Thigh[weight] = sorted(Thigh[weight].items() , key = lambda x : x[1] , reverse=True)
@@ -198,7 +210,9 @@ def mapping_size(request):
         for weight in Shoulder :
             Shoulder[weight] = sorted(Shoulder[weight].items() , key = lambda x : x[1] , reverse=True)
        
-       
+        print("waist ")
+        print(Waist)
+
         # 가장 많이 검색된 수치가 저장되어 있는 인덱스 
         # for height in Outseam :
         #     print(Outseam[height][0][0])
@@ -241,6 +255,7 @@ def mapping_size(request):
         return  JsonResponse({"message": "Hello World"}, status=200)
 
 
+
 # 신체 종류에 대한 객체를 받아서 해당 신체치수와 가장 많이 검색된 사이즈를 토대로 직선의 가중치와 편향을 반환
 def getWeight(size_obj ) :
     # 키 값을 저장
@@ -271,7 +286,6 @@ def getWeight(size_obj ) :
 # @csrf_exempt
 # def recommend_top(request):
 class recommend_top(APIView):
-
     def post(self, request, format = None):
         print(request.user)
         print(request.auth)
@@ -305,4 +319,48 @@ class recommend_top(APIView):
 
 
 
-                
+# 상의 사이즈 추천
+# @csrf_exempt
+# def recommend_top(request):
+class recommend_bottom(APIView):
+    def post(self, request, format = None):
+        print(request.user)
+        print(request.auth)
+        
+        # request body 로 넘어온 유저 이름을 이용하여 유저데이터를 가져온다
+        name = request.user
+        userModel = Profile.objects.get(username = name)
+        # 가져온 유저데이터의 키, 몸무게
+        height = userModel.height
+        weight = userModel.weight
+
+        # 도출한 직선의 방정식에 해당 유저의 키와 몸무게를 대입하여 결과 추천 값을 저장
+        wbModel = WeightBias.objects.get(model_pk = 1)
+        outseam = wbModel.outseamW * height + wbModel.outseamB
+        waist = wbModel.waistW * height + wbModel.waistB
+        thigh = wbModel.thighW * weight + wbModel.thighB
+        rise = wbModel.riseW * weight + wbModel.riseB
+        
+        print("waistW ")
+        print(wbModel.waistW)
+        print("waistB ")
+        print(wbModel.waistB)
+
+        print("riseW ")
+        print(wbModel.riseW)
+        print("thighB ")
+        print(wbModel.riseB)
+        
+
+
+        # 키와 몸무게가 0 일 경우 해당 관련 사이즈는 0으로 추천된다
+        if height == 0 :
+             return  JsonResponse({"outseam": 0 ,"waist": 0 , "thigh": thigh ,"rise": rise , "height" : height , "weight" : weight }, status=200)
+        
+        if weight == 0 :
+             return  JsonResponse({"outseam": outseam ,"waist": waist , "thigh": 0 ,"rise": 0 , "height" : height , "weight" : weight }, status=200)
+        
+
+
+        #추천 사이즈 반환
+        return  JsonResponse({"outseam": outseam ,"thigh": thigh , "rise": thigh + 3 ,"waist": thigh + 1 , "height" : height , "weight" : weight }, status=200)

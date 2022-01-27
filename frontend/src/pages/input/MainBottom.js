@@ -48,13 +48,13 @@ function MainBottom (props) {
 
         // 로그인 인증을 위해 토큰을 헤더에 심는다
         const headers =  { Authorization : `Token ${jwtToken}`};
-        const response = await Axios.post("http://localhost:8000/accounts/recommend/",{
+        const response = await Axios.post("http://localhost:8000/accounts/recommendBottom/",{
                 'Token' : jwtToken,
             }, {headers})    
 
 
         // setState 
-        setRecommend([`[ ${parseInt(response.data.back)} ]`, `[ ${parseInt(response.data.shoulder)} ]` , `[ ${parseInt(response.data.chest)} ]` ,`[ ${parseInt(response.data.arm)} ]`])
+        setRecommend([`[ ${parseInt(response.data.outseam)} ]`, `[ ${parseInt(response.data.thigh)} ]` , `[ ${parseInt(response.data.waist)} ]` ,`[ ${parseInt(response.data.rise)} ]`])
         setSize([response.data.height , response.data.weight])
     }
 

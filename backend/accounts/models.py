@@ -57,7 +57,6 @@ def create_user_profile(sender, instance, created, **kwargs):
         # 기본 유저모델이 생겼다면 토큰도 생성하기
         Token.objects.create(user=instance)
 
-
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()

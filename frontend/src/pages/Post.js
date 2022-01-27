@@ -151,7 +151,10 @@ class Post extends React.Component {
         } else {
             this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
         }
-
+        // 로딩페이지 켜기
+        this.setState({
+            loadingPage : <LoadingPage></LoadingPage>
+        })
         Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], page : this.page})
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
@@ -220,6 +223,10 @@ class Post extends React.Component {
             this.props.onSearch(<NavBottom keyword = {this.keyword} size = {this.size} onInput = {this.handleInput}/>)
         }
 
+        // 로딩페이지 켜기
+        this.setState({
+            loadingPage : <LoadingPage></LoadingPage>
+        })
         Axios.post(apiUrl2, { keyword: this.keyword, ba : this.size[0], sh: this.size[1], ch: this.size[2], ar: this.size[3], page : this.page })
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
