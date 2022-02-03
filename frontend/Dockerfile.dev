@@ -1,0 +1,10 @@
+# Nginx가 제공을 해줄 Build 파일들을 제공하는 단계
+FROM node:alpine
+WORKDIR /app
+    # package.json을 ./ 폴더로 복사
+COPY ./package.json ./
+# COPY ./yarn.lock ./
+
+RUN npm install --save --legacy-peer-deps
+COPY ./ ./
+CMD [ "npm" , "run" , "start" ]
