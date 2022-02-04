@@ -2,7 +2,7 @@ import {React  ,useState } from "react"
 import Post from "./Post"
 import Login from "./accounts/Login"
 import Signup from "./accounts/Signup";
-import { Routes , Route, useLocation } from "react-router-dom";
+import { Routes , Route, useLocation } from "react-router-dom"; // 도커 module not found 에러 
 import AppHeader from "../components/AppHeader";
 import AppFooter from "../components/AppFooter";
 import {  Nav } from 'react-bootstrap'

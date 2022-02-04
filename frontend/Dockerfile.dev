@@ -6,5 +6,13 @@ COPY ./package.json ./
 # COPY ./yarn.lock ./
 
 RUN npm install --save --legacy-peer-deps
+
+# react router dom 설치하기 다 안됨.. 
+RUN npm install --save react-router-dom 
+RUN yarn add react-router-dom
+run npm install -S react-router-dom
+run npm i @types/react-router-dom
+run npm install --save react react-dom react-scripts
+
 COPY ./ ./
 CMD [ "npm" , "run" , "start" ]
