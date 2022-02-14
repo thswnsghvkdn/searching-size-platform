@@ -10,7 +10,7 @@ import LoadingPage from "./Loading";
 import NavBottom from "./input/NavBottom"
 import Axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css'
-const apiUrl = "http://127.0.0.1:8000/search/"
+const apiUrl = "http://127.0.0.1:3000/api/search/"
 const apiUrl2 = "http://127.0.0.1:8000/search/top/"
 
 const { Meta } = Card
@@ -155,7 +155,7 @@ class Post extends React.Component {
         this.setState({
             loadingPage : <LoadingPage></LoadingPage>
         })
-        Axios.post(apiUrl, { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], page : this.page})
+        Axios.post("/api/search/", { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], page : this.page})
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
                         this.setState({

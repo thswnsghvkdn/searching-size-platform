@@ -36,9 +36,9 @@ function Signup() {
             const data2 = {username, height , weight , age};
             try {
                 // 기본 유저 모델로 회원 가입
-                const response = await Axios.post("http://localhost:8000/accounts/signup/", data)                
+                const response = await Axios.post("/api/accounts/signup/", data)                
                 // jwt 토큰 값 요청 
-                const response2 =  await Axios.post("http://localhost:8000/accounts/token/", data)
+                const response2 =  await Axios.post("/api/accounts/token/", data)
                 // jwt 토큰 값 
                 const {data : {Token : jwtToken}} = response2;
                 // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.
@@ -48,7 +48,7 @@ function Signup() {
                 const headers =  { Authorization : `Token ${jwtToken}`};
                 
                 // 세번째 인자는 config 로써 헤더 정보를 실을 수 있다.
-                await Axios.put("http://localhost:8000/accounts/"+ response.data.pk +"/update/" , data2 , {headers} )
+                await Axios.put("/api/accounts/"+ response.data.pk +"/update/" , data2 , {headers} )
 
                 // 성공 알림
                 notification.open({

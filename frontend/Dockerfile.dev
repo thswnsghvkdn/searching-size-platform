@@ -1,18 +1,12 @@
-# Nginx가 제공을 해줄 Build 파일들을 제공하는 단계
-FROM node:alpine
+# node base 이미지 예전 버전을 사용하여 createRequest is not a function 이라는 에러가 발생했다. 최신 버전을 유지할 것
+FROM node:14.18.2
 WORKDIR /app
     # package.json을 ./ 폴더로 복사
 COPY ./package.json ./
-# COPY ./yarn.lock ./
 
-RUN npm install --save --legacy-peer-deps
+# RUN npm install --save --legacy-peer-deps
 
-# react router dom 설치하기 다 안됨.. 
-RUN npm install --save react-router-dom 
-RUN yarn add react-router-dom
-run npm install -S react-router-dom
-run npm i @types/react-router-dom
-run npm install --save react react-dom react-scripts
+
 
 COPY ./ ./
 CMD [ "npm" , "run" , "start" ]

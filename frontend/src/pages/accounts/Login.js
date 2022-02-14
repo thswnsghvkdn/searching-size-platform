@@ -37,7 +37,7 @@ function Login(props) {
             const data = { username , password };
             try {
                 // 기본 유저 모델로 회원 가입
-                const response = await Axios.post("http://localhost:8000/accounts/login/", data)
+                const response = await Axios.post("/api/accounts/login/", data)
                 // jwt 토큰 값을 response에서 가져온다 
                 const {data : {Token : jwtToken}} = response;
                 // response 로 받은 토큰 값을 localStorage에 저장 , store.js 의 jwt setter 함수인 dispatch를 사용한다.
