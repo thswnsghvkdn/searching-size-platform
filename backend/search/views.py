@@ -223,7 +223,7 @@ def filter_size(obj) :
             index = 0
             tot = 0
             row += 1
-    if min_tot < 5  : # 사이즈가 5 이하인 것만 추천
+    if min_tot < data["filteringRage"]  : # 사이즈가 5 이하인 것만 추천
         goodsInfo["diff"] = min_tot
         goodsInfo["link"] = title["href"]
         goodsInfo["image"] = title["img"]
@@ -346,7 +346,7 @@ def filter_size2(obj) :
             row += 1
 
             
-    if min_tot < 5  : # 사이즈가 5 이하인 것만 추천
+    if min_tot < data["filteringRage"]  : # 사이즈가 5 이하인 것만 추천
         goodsInfo["diff"] = min_tot
         goodsInfo["link"] = title["href"]
         goodsInfo["image"] = title["img"]

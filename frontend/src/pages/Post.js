@@ -43,6 +43,7 @@ class Post extends React.Component {
         this.size = [-1, -1, -1, -1]
         this.cloth = "하의" // 상의, 하의 선택 구분
         this.page = 1
+        this.filteringRage = 3
     }
     componentDidMount() {
         console.log("hi")
@@ -107,9 +108,10 @@ class Post extends React.Component {
     }
 
     // 메인 검색 컴포넌트에 props로 넘긴 검색 창에서 받은 사이즈 
-    handleSize(newSize , keyword  ) {
+    handleSize(newSize , keyword , filteringRage ) {
         this.size = newSize;
         this.keyword = keyword
+        this.filteringRage = filteringRage
         // 키워드가 있을 경우 검색 함수 호출
         if(this.keyword) {
             this.setState({
@@ -155,7 +157,7 @@ class Post extends React.Component {
         this.setState({
             loadingPage : <LoadingPage></LoadingPage>
         })
-        Axios.post("/api/search/", { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], page : this.page})
+        Axios.post("/api/search/", { keyword: this.keyword, os: this.size[0], th: this.size[1], ws: this.size[2], rs: this.size[3], page : this.page, filteringRage : this.filteringRage })
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
                         this.setState({
@@ -227,7 +229,7 @@ class Post extends React.Component {
         this.setState({
             loadingPage : <LoadingPage></LoadingPage>
         })
-        Axios.post(apiUrl2, { keyword: this.keyword, ba : this.size[0], sh: this.size[1], ch: this.size[2], ar: this.size[3], page : this.page })
+        Axios.post(apiUrl2, { keyword: this.keyword, ba : this.size[0], sh: this.size[1], ch: this.size[2], ar: this.size[3], page : this.page , filteringRage : this.filteringRage})
                     .then(response => {
                         // 오차를 기준으로 오름차순 정렬된 리스트를 응답받는다.
                     this.setState({
@@ -235,8 +237,6 @@ class Post extends React.Component {
                     })
                     // 리스트 추가
                     let imageCard = this.state.listItem
-                    
-
                     let newCardCount = 0 // 새로 추가 될 카드 카운트 8개 미만이면 알아서 다시한번 호출
 
 
